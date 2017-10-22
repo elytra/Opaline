@@ -8,13 +8,23 @@ public class ModItems {
 
     public static ItemBase temp = new ItemBase("temp").setCreativeTab(Opaline.creativeTab);
 
+    public static ItemBase[] allItems = {
+            temp
+    };
+
     public static void register(IForgeRegistry<Item> registry) {
-        registry.registerAll(
-                temp
-        );
+        registry.registerAll(allItems);
     }
 
     public static void registerModels() {
-        temp.registerItemModel();
+        for (int i = 0; i < allItems.length ; i++) {
+            allItems[i].registerItemModel();
+        }
+    }
+
+    public static void registerOreDict() {
+        for (int i = 0; i < allItems.length ; i++) {
+            allItems[i].initOreDict();
+        }
     }
 }

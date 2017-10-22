@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -32,6 +33,10 @@ public class Opaline {
 
     public static final OpalineTab creativeTab = new OpalineTab();
 
+    static {
+        FluidRegistry.enableUniversalBucket();
+    }
+
     @SidedProxy(serverSide = "com.elytradev.Opaline.proxy.CommonProxy", clientSide = "com.elytradev.Opaline.proxy.ClientProxy")
     public static CommonProxy proxy;
 
@@ -46,7 +51,7 @@ public class Opaline {
     public void init(FMLInitializationEvent event) {
         //MinecraftForge.EVENT_BUS.register(new SoundRegisterListener());
         //MinecraftForge.EVENT_BUS.register(LightHandler.class);
-        //ModItems.registerOreDict(); // register oredict
+        ModItems.registerOreDict(); // register oredict
     }
 
     @Mod.EventHandler
