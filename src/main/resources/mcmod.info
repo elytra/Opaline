@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "opaline",
+    "name": "Opaline",
+    "description": "Turn enchantments into fluids and back again!",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "b0undarybreaker"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
