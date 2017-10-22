@@ -1,5 +1,9 @@
 package com.elytradev.opaline;
 
+import com.elytradev.opaline.block.ModBlocks;
+import com.elytradev.opaline.client.OpalineTab;
+import com.elytradev.opaline.item.ModItems;
+import com.elytradev.opaline.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -26,7 +30,9 @@ public class Opaline {
     @Mod.Instance(modId)
     public static Opaline instance;
 
-    @SidedProxy(serverSide = "net.tinzin.forge.Opaline.proxy.CommonProxy", clientSide = "net.tinzin.forge.Opaline.proxy.ClientProxy")
+    public static final OpalineTab creativeTab = new OpalineTab();
+
+    @SidedProxy(serverSide = "com.elytradev.Opaline.proxy.CommonProxy", clientSide = "com.elytradev.Opaline.proxy.ClientProxy")
     public static CommonProxy proxy;
 
 
@@ -38,9 +44,9 @@ public class Opaline {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new SoundRegisterListener());
+        //MinecraftForge.EVENT_BUS.register(new SoundRegisterListener());
         //MinecraftForge.EVENT_BUS.register(LightHandler.class);
-        ModItems.registerOreDict(); // register oredict
+        //ModItems.registerOreDict(); // register oredict
     }
 
     @Mod.EventHandler
@@ -57,9 +63,9 @@ public class Opaline {
         }
 
         @SubscribeEvent
-        public static void registerItems(ModelRegistryEvent event) {
+        public static void registerModels(ModelRegistryEvent event) {
             ModItems.registerModels();
-            ModBlocks.registerItemModels();
+            ModBlocks.registerModels();
         }
 
         @SubscribeEvent

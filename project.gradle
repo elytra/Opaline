@@ -2,7 +2,7 @@
 
 ext {
 	group = 'com.elytradev'
-	projectName = 'Skeleton'
+	projectName = 'Opaline'
 
 	useElytraVersionFormat = true
 	version = '1'
