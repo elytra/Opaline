@@ -2,9 +2,9 @@
 
 # Opaline
 
-[>> Downloads <<](https://github.com/elytra/Skeleton/releases)
+[>> Downloads <<](https://github.com/elytra/opaline/releases)
 
-*Oops, I spilled magic all over the table!*
+*Oops, I spilled my books all over the table!*
 
 **This mod is open source and under a permissive license.** All Elytra mods are,
 and as such, can be included in any modpack on any platform without prior

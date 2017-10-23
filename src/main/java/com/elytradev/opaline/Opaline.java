@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = Opaline.modId, name = Opaline.name, version = Opaline.version)
 public class Opaline {
-    public static final String modId = "Opaline";
+    public static final String modId = "opaline";
     public static final String name  = "Opaline";
     public static final String version = "1.0.0";
 
@@ -37,7 +37,7 @@ public class Opaline {
         FluidRegistry.enableUniversalBucket();
     }
 
-    @SidedProxy(serverSide = "com.elytradev.Opaline.proxy.CommonProxy", clientSide = "com.elytradev.Opaline.proxy.ClientProxy")
+    @SidedProxy(serverSide = "com.elytradev.opaline.proxy.CommonProxy", clientSide = "com.elytradev.opaline.proxy.ClientProxy")
     public static CommonProxy proxy;
 
 

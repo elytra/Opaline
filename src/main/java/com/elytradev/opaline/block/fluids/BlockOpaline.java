@@ -5,10 +5,10 @@ import net.minecraft.block.material.Material;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.BlockFluidClassic;
 
-public class BlockMana extends BlockFluidClassic {
+public class BlockOpaline extends BlockFluidClassic {
     protected String name;
 
-    public BlockMana(Fluid fluid, String name) {
+    public BlockOpaline(Fluid fluid, String name) {
         super(fluid, Material.WATER);
         this.quantaPerBlock= 8;
         this.quantaPerBlockFloat = 8f;

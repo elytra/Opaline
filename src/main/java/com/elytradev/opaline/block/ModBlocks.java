@@ -1,30 +1,26 @@
 package com.elytradev.opaline.block;
 
-import com.elytradev.opaline.Opaline;
-import com.elytradev.opaline.block.fluids.BlockMana;
+import com.elytradev.opaline.block.fluids.BlockOpaline;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModBlocks {
 
-    public static BlockBase temp = new BlockBase(Material.ROCK, "temp").setCreativeTab(Opaline.creativeTab);
 
-    public static Fluid fluidMana = new Fluid("mana",
-        new ResourceLocation("opaline", "blocks/fluids/mana_still"),
-        new ResourceLocation("opaline", "blocks/fluids/mana_flowing"))
+    public static Fluid fluidOpaline = new Fluid("opaline",
+        new ResourceLocation("opaline", "blocks/fluids/opaline_still"),
+        new ResourceLocation("opaline", "blocks/fluids/opaline_flowing"))
         .setDensity(1396) //the density of glitter glue
         .setTemperature(294) //approximately 69ºF
         .setRarity(EnumRarity.UNCOMMON);
 
     public static IBlockBase[] allBlocks = {
-            temp
+
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -32,9 +28,11 @@ public class ModBlocks {
             IBlockBase block = allBlocks[i];
             registry.register(block.toBlock());
         }
-        BlockMana mana = new BlockMana(fluidMana, "fluid_mana");
-        registry.register(mana);
-        fluidMana.setBlock(mana);
+        FluidRegistry.registerFluid(ModBlocks.fluidOpaline);
+        BlockOpaline opaline = new BlockOpaline(fluidOpaline, "fluid_opaline");
+        registry.register(opaline);
+        fluidOpaline.setBlock(opaline);
+        FluidRegistry.addBucketForFluid(ModBlocks.fluidOpaline);
         //GameRegistry.registerTileEntity(temp.getTileEntityClass(), temp.getRegistryName().toString());
     }
 
