@@ -20,8 +20,8 @@ public class ModBlocks {
         .setTemperature(294) //approximately 69ºF
         .setRarity(EnumRarity.UNCOMMON);
     public static Fluid fluidLazurite = new Fluid("lazurite",
-            new ResourceLocation("lazurite", "blocks/fluids/lazurite_still"),
-            new ResourceLocation("lazurite", "blocks/fluids/lazurite_flowing"))
+            new ResourceLocation("opaline", "blocks/fluids/lazurite_still"),
+            new ResourceLocation("opaline", "blocks/fluids/lazurite_flowing"))
             .setDensity(1436) //the year Gutenberg invented the printing press
             .setTemperature(506) //451ºF
             .setRarity(EnumRarity.RARE);
@@ -35,6 +35,7 @@ public class ModBlocks {
             IBlockBase block = allBlocks[i];
             registry.register(block.toBlock());
         }
+
         FluidRegistry.registerFluid(ModBlocks.fluidOpaline);
         BlockOpaline opaline = new BlockOpaline(fluidOpaline, "fluid_opaline");
         registry.register(opaline);
@@ -46,6 +47,7 @@ public class ModBlocks {
         registry.register(lazurite);
         fluidLazurite.setBlock(lazurite);
         FluidRegistry.addBucketForFluid(ModBlocks.fluidLazurite);
+
         //GameRegistry.registerTileEntity(temp.getTileEntityClass(), temp.getRegistryName().toString());
     }
 
