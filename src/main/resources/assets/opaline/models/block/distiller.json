@@ -1,0 +1,267 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"textures": {
+		"distiller": "opaline:blocks/distiller",
+		"particle": "opaline:blocks/distiller"
+	},
+	"elements": [
+		{
+			"name": "platform",
+			"from": [1, 0, 4],
+			"to": [15, 1, 12],
+			"faces": {
+				"north": {
+					"uv": [2, 8, 16, 9],
+					"texture": "#distiller"
+				},
+				"east": {
+					"uv": [5, 8, 13, 9],
+					"texture": "#distiller"
+				},
+				"south": {
+					"uv": [2, 8, 16, 9],
+					"texture": "#distiller"
+				},
+				"west": {
+					"uv": [5, 8, 13, 9],
+					"texture": "#distiller"
+				},
+				"up": {
+					"uv": [2, 8, 16, 16],
+					"texture": "#distiller"
+				},
+				"down": {
+					"uv": [2, 8, 16, 16],
+					"texture": "#distiller"
+				}
+			}
+		},
+		{
+			"name": "bottle 1",
+			"from": [2, 1, 5],
+			"to": [8, 7, 11],
+			"faces": {
+				"north": {
+					"uv": [10, 1, 16, 7],
+					"texture": "#distiller"
+				},
+				"east": {
+					"uv": [10, 1, 16, 7],
+					"texture": "#distiller"
+				},
+				"south": {
+					"uv": [10, 1, 16, 7],
+					"texture": "#distiller"
+				},
+				"west": {
+					"uv": [10, 1, 16, 7],
+					"texture": "#distiller"
+				},
+				"up": {
+					"uv": [10, 1, 16, 7],
+					"texture": "#distiller"
+				},
+				"down": {
+					"uv": [10, 1, 16, 7],
+					"texture": "#distiller"
+				}
+			}
+		},
+		{
+			"name": "bottle 2",
+			"from": [10, 1, 6],
+			"to": [14, 4, 10],
+			"faces": {
+				"north": {
+					"uv": [2, 4, 6, 7],
+					"texture": "#distiller"
+				},
+				"east": {
+					"uv": [2, 4, 6, 7],
+					"texture": "#distiller"
+				},
+				"south": {
+					"uv": [2, 4, 6, 7],
+					"texture": "#distiller"
+				},
+				"west": {
+					"uv": [2, 4, 6, 7],
+					"texture": "#distiller"
+				},
+				"up": {
+					"uv": [2, 0, 6, 4],
+					"texture": "#distiller"
+				},
+				"down": {
+					"uv": [2, 0, 6, 4],
+					"texture": "#distiller"
+				}
+			}
+		},
+		{
+			"name": "tube 1",
+			"from": [4, 9, 7],
+			"to": [6, 15, 9],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 2, 6],
+					"texture": "#distiller"
+				},
+				"east": {
+					"uv": [0, 0, 2, 6],
+					"texture": "#distiller"
+				},
+				"south": {
+					"uv": [0, 0, 2, 6],
+					"texture": "#distiller"
+				},
+				"west": {
+					"uv": [0, 0, 2, 6],
+					"texture": "#distiller"
+				},
+				"up": {
+					"uv": [0, 7, 2, 9],
+					"texture": "#distiller"
+				},
+				"down": {
+					"uv": [0, 7, 2, 9],
+					"texture": "#distiller"
+				}
+			}
+		},
+		{
+			"name": "bottle 1.5",
+			"from": [3, 7, 6],
+			"to": [7, 9, 10],
+			"faces": {
+				"north": {
+					"uv": [6, 1, 10, 3],
+					"texture": "#distiller"
+				},
+				"east": {
+					"uv": [6, 1, 10, 3],
+					"texture": "#distiller"
+				},
+				"south": {
+					"uv": [6, 1, 10, 3],
+					"texture": "#distiller"
+				},
+				"west": {
+					"uv": [6, 1, 10, 3],
+					"texture": "#distiller"
+				},
+				"up": {
+					"uv": [2, 0, 6, 4],
+					"texture": "#distiller"
+				},
+				"down": {
+					"uv": [2, 0, 6, 4],
+					"texture": "#distiller"
+				}
+			}
+		},
+		{
+			"name": "tube 3",
+			"from": [11, 3, 7],
+			"to": [13, 8, 9],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 2, 5],
+					"texture": "#distiller"
+				},
+				"east": {
+					"uv": [0, 0, 2, 5],
+					"texture": "#distiller"
+				},
+				"south": {
+					"uv": [0, 0, 2, 5],
+					"texture": "#distiller"
+				},
+				"west": {
+					"uv": [0, 0, 2, 5],
+					"texture": "#distiller"
+				},
+				"up": {
+					"uv": [0, 7, 2, 9],
+					"texture": "#distiller"
+				},
+				"down": {
+					"uv": [0, 7, 2, 9],
+					"texture": "#distiller"
+				}
+			}
+		},
+		{
+			"name": "tube 2",
+			"from": [0.8, 15, 7.5],
+			"to": [10.7, 16, 8.5],
+			"faces": {
+				"north": {
+					"uv": [6, 0, 16, 1],
+					"texture": "#distiller"
+				},
+				"east": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"south": {
+					"uv": [6, 0, 16, 1],
+					"texture": "#distiller"
+				},
+				"west": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"up": {
+					"uv": [6, 0, 16, 1],
+					"texture": "#distiller"
+				},
+				"down": {
+					"uv": [6, 0, 16, 1],
+					"texture": "#distiller"
+				}
+			},
+			"rotation": {
+				"origin": [1.8, 10, 6.5],
+				"axis": "z",
+				"angle": -45
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.7, 0.7, 0.7],
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0]
+		},
+		"thirdperson_lefthand": {
+			"scale": [0.7, 0.7, 0.7],
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0]
+		},
+		"firstperson_righthand": {
+			"scale": [1, 1, 1],
+			"rotation": [0, 45, 0],
+			"translation": [0, 0, 0]
+		},
+		"firstperson_lefthand": {
+			"scale": [1, 1, 1],
+			"rotation": [0, 225, 0],
+			"translation": [0, 0, 0]
+		},
+		"head": {
+			"scale": [1.75, 1.75, 1.75],
+			"rotation": [0, 89, 0],
+			"translation": [0, 7.5, -6]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0.5],
+			"rotation": [0, 0, 0],
+			"translation": [0, 3, 0]
+		},
+		"fixed": {
+			"scale": [1, 1, 1],
+			"rotation": [0, 0, 0],
+			"translation": [0, 0, 0]
+		},
+		"gui": {
+			"scale": [0.825, 0.825, 0.825],
+			"rotation": [30, 225, 0],
+			"translation": [0, 1, 0]
+		}
+	}
+}

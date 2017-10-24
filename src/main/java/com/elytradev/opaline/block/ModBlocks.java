@@ -1,8 +1,10 @@
 package com.elytradev.opaline.block;
 
+import com.elytradev.opaline.Opaline;
 import com.elytradev.opaline.block.fluids.BlockLazurite;
 import com.elytradev.opaline.block.fluids.BlockOpaline;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +14,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModBlocks {
 
+    public static BlockBase distiller = new BlockBase(Material.ROCK, "distiller").setCreativeTab(Opaline.creativeTab);
 
     public static Fluid fluidOpaline = new Fluid("opaline",
         new ResourceLocation("opaline", "blocks/fluids/opaline_still"),
@@ -27,7 +30,7 @@ public class ModBlocks {
             .setRarity(EnumRarity.RARE);
 
     public static IBlockBase[] allBlocks = {
-
+        distiller
     };
 
     public static void register(IForgeRegistry<Block> registry) {
