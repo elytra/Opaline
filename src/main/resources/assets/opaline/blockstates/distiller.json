@@ -1,14 +1,14 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-        "model":"opaline:block/distiller"
+        "model":"opaline:distiller"
     },
 	"variants": {
 		"normal": {
-			"model": "opaline:block/distiller"
+			"model": "opaline:distiller"
 		},
 		"inventory": {
-			"model": "opaline:block/distiller"
+			"model": "opaline:distiller"
 		}
 	}
 }
