@@ -46,11 +46,11 @@ public class BlockTransparent extends Block implements IBlockBase {
     }
 
 
-    // @SideOnly(Side.CLIENT)
-    // @Override
-    // public BlockRenderLayer getBlockLayer() {
-    //     return BlockRenderLayer.TRANSLUCENT;
-    // }
+    @SideOnly(Side.CLIENT)
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.TRANSLUCENT;
+    }
 
     public Block toBlock(){
         return this;
