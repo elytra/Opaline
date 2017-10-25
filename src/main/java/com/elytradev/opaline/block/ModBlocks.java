@@ -10,11 +10,12 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModBlocks {
 
-    public static BlockTransparent distiller = new BlockTransparent(Material.ROCK, "distiller").setCreativeTab(Opaline.creativeTab);
+    public static BlockDistiller distiller = new BlockDistiller();
 
     public static Fluid fluidOpaline = new Fluid("opaline",
         new ResourceLocation("opaline", "blocks/fluids/opaline_still"),
@@ -51,7 +52,7 @@ public class ModBlocks {
         fluidLazurite.setBlock(lazurite);
         FluidRegistry.addBucketForFluid(ModBlocks.fluidLazurite);
 
-        //GameRegistry.registerTileEntity(temp.getTileEntityClass(), temp.getRegistryName().toString());
+        GameRegistry.registerTileEntity(distiller.getTileEntityClass(), distiller.getRegistryName().toString());
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {

@@ -1,4 +1,6 @@
 package com.elytradev.opaline.tile;
 
-public class TileEntityDistiller {
+import net.minecraft.tileentity.TileEntity;
+
+public class TileEntityDistiller extends TileEntity {
 }
