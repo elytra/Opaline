@@ -10,8 +10,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -43,6 +45,14 @@ public class BlockDistiller extends BlockTileEntity<TileEntityDistiller> impleme
 
     public BlockStateContainer createBlockState(){
         return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!world.isRemote) {
+            player.openGui(Opaline.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+        }
+        return true;
     }
 
     @Override
