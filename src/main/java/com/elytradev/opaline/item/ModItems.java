@@ -6,10 +6,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModItems {
 
-    public static ItemBase temp = new ItemBase("temp").setCreativeTab(Opaline.creativeTab);
+    public static ItemBase exhaustedLapis = new ItemBase("exhausted_lapis").setCreativeTab(Opaline.creativeTab);
 
     public static ItemBase[] allItems = {
-            temp
+            exhaustedLapis
     };
 
     public static void register(IForgeRegistry<Item> registry) {

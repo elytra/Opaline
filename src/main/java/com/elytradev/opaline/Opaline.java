@@ -1,7 +1,6 @@
 package com.elytradev.opaline;
 
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
-import com.elytradev.concrete.inventory.gui.ConcreteContainer;
 import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.client.OpalineTab;
