@@ -31,18 +31,21 @@ public class BlockDistiller extends BlockTileEntity<TileEntityDistiller> impleme
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
+    @Override
     public int getMetaFromState(IBlockState state){
         int meta = 0;
         meta |= state.getValue(FACING).getHorizontalIndex();
         return meta;
     }
 
+    @Override
     public IBlockState getStateFromMeta(int meta){
         int facebits = meta & FACE;
         EnumFacing facing = EnumFacing.getHorizontal(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
     }
 
+    @Override
     public BlockStateContainer createBlockState(){
         return new BlockStateContainer(this, FACING);
     }
@@ -106,6 +109,7 @@ public class BlockDistiller extends BlockTileEntity<TileEntityDistiller> impleme
         return BlockRenderLayer.CUTOUT;
     }
 
+    @Override
     public Block toBlock(){
         return this;
     }

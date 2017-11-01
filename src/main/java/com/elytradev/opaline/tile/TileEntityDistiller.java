@@ -4,12 +4,20 @@ import com.elytradev.concrete.inventory.*;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.item.ModItems;
 import com.elytradev.opaline.util.FluidAccess;
+import com.google.common.base.Predicates;
+
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -31,6 +39,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
     private static final int processLength = 200;
     private int currentFuelTime;
     private int maxFuelTime;
+    public int ticksExisted;
     public static final int SLOT_LAPIS = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_EXHAUSTED = 2;
@@ -60,18 +69,70 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
     @Override
     public void update() {
         if (!world.isRemote) {
-            //System.out.println("currentProcessTime: " + currentProcessTime + ", currentFuelTime: " + currentFuelTime);
-            if (consumeFuel()) currentProcessTime++;
-            if (items.getStackInSlot(SLOT_LAPIS).isEmpty() || !processItem()) {
-                currentProcessTime = 0;
-            }
-            if (currentProcessTime >= processLength) {
-                if (processItem()) {
+            if (processItem()) {
+                if (consumeFuel()) currentProcessTime++;
+                if (items.getStackInSlot(SLOT_LAPIS).isEmpty()) {
+                    currentProcessTime = 0;
+                }
+                if (currentProcessTime >= processLength) {
                     items.extractItem(SLOT_LAPIS, 1, false);
                     items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), false);
                     tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), true);
+                    currentProcessTime = 0;
                 }
-                currentProcessTime = 0;
+            } else if (currentFuelTime > 0) {
+                consumeFuel();
+            }
+        }
+        ticksExisted++;
+    }
+    
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        NBTTagCompound tag = super.writeToNBT(compound);
+        tag.setTag("OutputTank", tank.writeToNBT(new NBTTagCompound()));
+        tag.setTag("Inventory", items.serializeNBT());
+        return tag;
+    }
+    
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        tank.readFromNBT(compound.getCompoundTag("OutputTank"));
+        items.deserializeNBT(compound.getCompoundTag("Inventory"));
+    }
+    
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
+    
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+    }
+    
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        handleUpdateTag(pkt.getNbtCompound());
+    }
+    
+    @Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+        readFromNBT(tag);
+    }
+    
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        // again, I've copy-pasted this like 12 times, should probably go into Concrete
+        if (!hasWorld() || getWorld().isRemote) return;
+        WorldServer ws = (WorldServer)getWorld();
+        Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+        SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+        for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
+            if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
+                player.connection.sendPacket(packet);
             }
         }
     }

@@ -14,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +24,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,7 +34,7 @@ import javax.annotation.Nullable;
 public class Opaline {
     public static final String modId = "opaline";
     public static final String name  = "Opaline";
-    public static final String version = "1.0.0";
+    public static final String version = "@VERSION@";
 
     @Mod.Instance(modId)
     public static Opaline instance;
@@ -73,6 +71,7 @@ public class Opaline {
                 return new ConcreteGui(container);
             }
         });
+        proxy.preInit();
     }
 
     @Mod.EventHandler
