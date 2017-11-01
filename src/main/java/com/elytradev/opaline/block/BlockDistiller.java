@@ -69,7 +69,7 @@ public class BlockDistiller extends BlockTileEntity<TileEntityDistiller> impleme
     }
 
     @Override
-    public BlockBase setCreativeTab(CreativeTabs tab) {
+    public BlockDistiller setCreativeTab(CreativeTabs tab) {
         super.setCreativeTab(Opaline.creativeTab);
         return this;
     }

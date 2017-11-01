@@ -1,4 +1,5 @@
 #items
+item.exhausted_lapis.name=Exhausted Lapis
 
 #blocks
 fluid.opaline=Opaline

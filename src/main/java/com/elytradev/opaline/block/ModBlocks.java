@@ -15,7 +15,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModBlocks {
 
-    public static BlockDistiller distiller = new BlockDistiller();
+    public static BlockDistiller distiller = new BlockDistiller().setCreativeTab(Opaline.creativeTab);
 
     public static Fluid fluidOpaline = new Fluid("opaline",
         new ResourceLocation("opaline", "blocks/fluids/opaline_still"),
