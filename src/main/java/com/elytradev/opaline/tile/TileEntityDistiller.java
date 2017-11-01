@@ -58,7 +58,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
     }
 
     @Override
-	public void update() {
+    public void update() {
         if (!world.isRemote) {
             //System.out.println("currentProcessTime: " + currentProcessTime + ", currentFuelTime: " + currentFuelTime);
             if (consumeFuel()) currentProcessTime++;
