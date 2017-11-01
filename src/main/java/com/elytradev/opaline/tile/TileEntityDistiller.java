@@ -79,29 +79,33 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
     private boolean processItem() {
         ItemStack itemExtracted = items.extractItem(SLOT_LAPIS, 1, true);
         ItemStack itemInserted = items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), true);
-        int tankFilled = tank.fill(new FluidStack(ModBlocks.fluidOpaline, 300), false);
+        int tankFilled = tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), false);
         if (itemExtracted.isEmpty()) {
             System.out.println("failed to extract " + itemExtracted + ", isEmpty " + itemExtracted.isEmpty());
             return false;
         } else if (!itemInserted.isEmpty()) {
             System.out.println("failed to insert " + itemInserted + ", isEmpty " + itemExtracted.isEmpty());
             return false;
-        } else if (tankFilled != 300) {
+        } else if (tankFilled != 100) {
             System.out.println("failed to insert fluid, inserted " + tankFilled + " mb total");
             return false;
         } else {
             System.out.println("all simulations succeeded, processing items");
+            items.extractItem(SLOT_LAPIS, 1, false);
+            items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), false);
+            tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), true);
             return true;
         }
     }
 
     private boolean consumeFuel() {
         if (currentFuelTime == 0) {
-            ItemStack useFuel = items.extractItem(SLOT_FUEL, 1, false);
-            if (!useFuel.isEmpty()) {
-                int newFuelTicks = TileEntityFurnace.getItemBurnTime(useFuel);
+            ItemStack usedFuel = items.extractItem(SLOT_FUEL, 1, false);
+            if (!usedFuel.isEmpty() && !items.getStackInSlot(SLOT_LAPIS).isEmpty()) {
+                int newFuelTicks = TileEntityFurnace.getItemBurnTime(usedFuel);
                 maxFuelTime = newFuelTicks;
                 currentFuelTime = newFuelTicks;
+                System.out.println("New fuel added! At " + currentFuelTime + " out of " + maxFuelTime + " fuel ticks.");
             } else {
                 return false;
             }

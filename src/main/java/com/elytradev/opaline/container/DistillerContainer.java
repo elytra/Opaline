@@ -25,9 +25,9 @@ public class DistillerContainer extends ConcreteContainer {
         WItemSlot slotExhausted = WItemSlot.of(container, 2);
         WItemSlot playerInv = WItemSlot.ofPlayerStorage(player);
         WItemSlot playerHot = WItemSlot.of(player, 0, 9, 1);
-        WFluidBar tankOpaline = new WFluidBar(distillerBG, distillerFG, distiller.tank);
-        WBar fuelTicks = new WBar(fireBG, fireFG, container, 0, 1);
-        WBar progressTicks = new WBar(arrowBG, arrowFG, container, 2, 3);
+        WFluidBar tankOpaline = new WFluidBar(distillerBG, distillerFG, distiller.tank).withTooltip("%d/%d mB");
+        WBar fuelTicks = new WBar(fireBG, fireFG, container, 0, 1, WBar.Direction.UP);
+        WBar progressTicks = new WBar(arrowBG, arrowFG, container, 2, 3, WBar.Direction.RIGHT);
         panel.add(slotLapis, 48, 16);
         panel.add(slotFuel, 48, 52);
         panel.add(slotExhausted, 101, 52);
