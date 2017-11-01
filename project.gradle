@@ -7,8 +7,8 @@ ext {
 	useElytraVersionFormat = true
 	version = '1'
 
-	concreteVersion = '0.3.3-SNAPSHOT'
-	concreteModules = [ 'common', 'gui' ]
+	concreteVersion = '0.3.4-SNAPSHOT'
+	concreteModules = [ 'common', 'inventory' ]
 
 	coremod = null
 	miniVersion = null

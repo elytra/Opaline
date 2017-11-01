@@ -4,19 +4,14 @@ import com.elytradev.concrete.inventory.*;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.item.ModItems;
 import com.elytradev.opaline.util.FluidAccess;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -62,15 +57,20 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
         return this.tank.getFluidAmount()*i/this.tank.getCapacity();
     }
 
-    public void update() {
-        if(world.isRemote) {
+    @Override
+	public void update() {
+        if (!world.isRemote) {
             //System.out.println("currentProcessTime: " + currentProcessTime + ", currentFuelTime: " + currentFuelTime);
             if (consumeFuel()) currentProcessTime++;
-            if (items.getStackInSlot(SLOT_LAPIS).isEmpty()) {
+            if (items.getStackInSlot(SLOT_LAPIS).isEmpty() || !processItem()) {
                 currentProcessTime = 0;
             }
             if (currentProcessTime >= processLength) {
-                processItem();
+                if (processItem()) {
+                    items.extractItem(SLOT_LAPIS, 1, false);
+                    items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), false);
+                    tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), true);
+                }
                 currentProcessTime = 0;
             }
         }
@@ -81,19 +81,12 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
         ItemStack itemInserted = items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), true);
         int tankFilled = tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), false);
         if (itemExtracted.isEmpty()) {
-            System.out.println("failed to extract " + itemExtracted + ", isEmpty " + itemExtracted.isEmpty());
             return false;
         } else if (!itemInserted.isEmpty()) {
-            System.out.println("failed to insert " + itemInserted + ", isEmpty " + itemExtracted.isEmpty());
             return false;
         } else if (tankFilled != 100) {
-            System.out.println("failed to insert fluid, inserted " + tankFilled + " mb total");
             return false;
         } else {
-            System.out.println("all simulations succeeded, processing items");
-            items.extractItem(SLOT_LAPIS, 1, false);
-            items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), false);
-            tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), true);
             return true;
         }
     }
@@ -122,9 +115,9 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
         }
         else {
             return view.withField(0, () -> currentFuelTime)
-            .withField(1, () -> maxFuelTime)
-            .withField(2, () -> currentProcessTime)
-            .withField(3, () -> processLength);
+                    .withField(1, () -> maxFuelTime)
+                    .withField(2, () -> currentProcessTime)
+                    .withField(3, () -> processLength);
         }
     }
 
