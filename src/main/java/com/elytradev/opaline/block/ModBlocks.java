@@ -16,6 +16,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class ModBlocks {
 
     public static BlockDistiller distiller = new BlockDistiller().setCreativeTab(Opaline.creativeTab);
+    public static BlockInfuser infuser = new BlockInfuser().setCreativeTab(Opaline.creativeTab);
 
     public static Fluid fluidOpaline = new Fluid("opaline",
         new ResourceLocation("opaline", "blocks/fluids/opaline_still"),
@@ -31,7 +32,7 @@ public class ModBlocks {
             .setRarity(EnumRarity.RARE);
 
     public static IBlockBase[] allBlocks = {
-        distiller
+        distiller, infuser
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -53,6 +54,7 @@ public class ModBlocks {
         FluidRegistry.addBucketForFluid(ModBlocks.fluidLazurite);
 
         GameRegistry.registerTileEntity(distiller.getTileEntityClass(), distiller.getRegistryName().toString());
+        GameRegistry.registerTileEntity(infuser.getTileEntityClass(), infuser.getRegistryName().toString());
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {

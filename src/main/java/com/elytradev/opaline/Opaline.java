@@ -5,9 +5,11 @@ import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.client.OpalineTab;
 import com.elytradev.opaline.container.DistillerContainer;
+import com.elytradev.opaline.container.InfuserContainer;
 import com.elytradev.opaline.item.ModItems;
 import com.elytradev.opaline.proxy.CommonProxy;
 import com.elytradev.opaline.tile.TileEntityDistiller;
+import com.elytradev.opaline.tile.TileEntityInfuser;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -53,22 +55,45 @@ public class Opaline {
     public void preInit(FMLPreInitializationEvent event) {
         System.out.println(name + " is loading!");
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new IGuiHandler() {
+            public static final int DISTILLER = 0;
+            public static final int INFUSER = 1;
             @Nullable
             @Override
             public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-                return new DistillerContainer(
-                        player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
-                        (TileEntityDistiller)world.getTileEntity(new BlockPos(x,y,z)));
+                switch (ID) {
+                    case DISTILLER:
+                        return new DistillerContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityDistiller)world.getTileEntity(new BlockPos(x,y,z)));
+                    case INFUSER:
+                        return new InfuserContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityInfuser)world.getTileEntity(new BlockPos(x,y,z)));
+                    default:
+                        return null;
+                }
+
             }
 
             @Nullable
             @Override
             @SideOnly(Side.CLIENT)
             public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-                DistillerContainer container = new DistillerContainer(
-                        player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
-                        (TileEntityDistiller)world.getTileEntity(new BlockPos(x,y,z)));
-                return new ConcreteGui(container);
+                switch (ID) {
+                    case DISTILLER:
+                        DistillerContainer distillerContainer = new DistillerContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityDistiller)world.getTileEntity(new BlockPos(x,y,z)));
+                        return new ConcreteGui(distillerContainer);
+                    case INFUSER:
+                        InfuserContainer infuserContainer = new InfuserContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityInfuser)world.getTileEntity(new BlockPos(x,y,z)));
+                        return new ConcreteGui(infuserContainer);
+                    default:
+                        return null;
+                }
+
             }
         });
         proxy.preInit();

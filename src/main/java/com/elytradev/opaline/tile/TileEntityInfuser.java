@@ -29,7 +29,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
 
-public class TileEntityDistiller extends TileEntity implements ITickable, IContainerInventoryHolder {
+public class TileEntityInfuser extends TileEntity implements ITickable, IContainerInventoryHolder {
 
     public ConcreteFluidTank tank;
     public ConcreteItemStorage items;
@@ -38,9 +38,9 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
     private int currentFuelTime;
     private int maxFuelTime;
     public int ticksExisted;
-    public static final int SLOT_LAPIS = 0;
-    public static final int SLOT_FUEL = 1;
-    public static final int SLOT_EXHAUSTED = 2;
+    public static final int SLOT_EXHAUSTED = 0;
+    public static final int SLOT_BOOKSHELF = 1;
+    public static final int SLOT_LAPIS = 2;
 
     public static boolean oreMatches(String oreName, ItemStack stack) {
         if (oreName == null) return false;
@@ -48,13 +48,13 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
         return ArrayUtils.contains(OreDictionary.getOreIDs(stack), oreId);
     }
 
-    public TileEntityDistiller() {
-        this.tank = new ConcreteFluidTank(300).withFillValidator((it)->false);
+    public TileEntityInfuser() {
+        this.tank = new ConcreteFluidTank(100).withFillValidator((it)->true);
         this.items = new ConcreteItemStorage(3).withValidators(
-            (it)->oreMatches("gemLapis", it), Validators.FURNACE_FUELS, Validators.NOTHING)
-            .setCanExtract(SLOT_LAPIS, false)
-            .setCanExtract(SLOT_FUEL, false)
-            .withName(ModBlocks.distiller.getUnlocalizedName() + ".name");
+                (it)->oreMatches("gemLapis", it), Validators.FURNACE_FUELS, Validators.NOTHING)
+                .setCanExtract(SLOT_EXHAUSTED, false)
+                .setCanExtract(SLOT_BOOKSHELF, false)
+                .withName(ModBlocks.infuser.getUnlocalizedName() + ".name");
         tank.listen(this::markDirty);
         items.listen(this::markDirty);
     }
@@ -84,7 +84,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
         }
         ticksExisted++;
     }
-    
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tag = super.writeToNBT(compound);
@@ -92,34 +92,34 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
         tag.setTag("Inventory", items.serializeNBT());
         return tag;
     }
-    
+
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         tank.readFromNBT(compound.getCompoundTag("OutputTank"));
         items.deserializeNBT(compound.getCompoundTag("Inventory"));
     }
-    
+
     @Override
     public NBTTagCompound getUpdateTag() {
         return writeToNBT(new NBTTagCompound());
     }
-    
+
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
     }
-    
+
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         handleUpdateTag(pkt.getNbtCompound());
     }
-    
+
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
     }
-    
+
     @Override
     public void markDirty() {
         super.markDirty();
@@ -152,7 +152,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
 
     private boolean consumeFuel() {
         if (currentFuelTime == 0) {
-            ItemStack usedFuel = items.extractItem(SLOT_FUEL, 1, false);
+            ItemStack usedFuel = items.extractItem(SLOT_BOOKSHELF, 1, false);
             if (!usedFuel.isEmpty() && !items.getStackInSlot(SLOT_LAPIS).isEmpty()) {
                 int newFuelTicks = TileEntityFurnace.getItemBurnTime(usedFuel);
                 maxFuelTime = newFuelTicks;
