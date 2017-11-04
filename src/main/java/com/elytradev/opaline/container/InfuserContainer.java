@@ -24,10 +24,10 @@ public class InfuserContainer extends ConcreteContainer {
         WItemSlot playerInv = WItemSlot.ofPlayerStorage(player);
         WItemSlot playerHot = WItemSlot.of(player, 0, 9, 1);
         WFluidBar tankOpaline = new WFluidBar(tankBG, tankFG, infuser.tank).withTooltip("%d/%d mB");
-        WBar progressTicks = new WBar(arrowBG, arrowFG, container, 2, 3, WBar.Direction.RIGHT);
+        WBar progressTicks = new WBar(arrowBG, arrowFG, container, 2, 3, WBar.Direction.RIGHT).withTooltip("%d/%d ticks");
         panel.add(slotExhausted, 48, 16);
         panel.add(slotBookshelf, 48, 52);
-        panel.add(slotLapis, 101, 52);
+        panel.add(slotLapis, 105, 33);
         panel.add(playerInv, 0, 87);
         panel.add(playerHot, 0, 145);
         panel.add(tankOpaline, 50, 35, 12, 14);

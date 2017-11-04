@@ -7,7 +7,11 @@ import com.elytradev.opaline.util.FluidAccess;
 import com.google.common.base.Predicates;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -34,24 +38,19 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     public ConcreteFluidTank tank;
     public ConcreteItemStorage items;
     private int currentProcessTime;
-    private static final int processLength = 200;
+    private static final int processLength = 500;
     private int currentFuelTime;
-    private int maxFuelTime;
+    private int maxFuelTime = 5;
+    private int currentDischargeTicks;
     public int ticksExisted;
     public static final int SLOT_EXHAUSTED = 0;
     public static final int SLOT_BOOKSHELF = 1;
     public static final int SLOT_LAPIS = 2;
 
-    public static boolean oreMatches(String oreName, ItemStack stack) {
-        if (oreName == null) return false;
-        int oreId = OreDictionary.getOreID(oreName);
-        return ArrayUtils.contains(OreDictionary.getOreIDs(stack), oreId);
-    }
-
     public TileEntityInfuser() {
-        this.tank = new ConcreteFluidTank(100).withFillValidator((it)->true);
+        this.tank = new ConcreteFluidTank(10).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidOpaline));
         this.items = new ConcreteItemStorage(3).withValidators(
-                (it)->oreMatches("gemLapis", it), Validators.FURNACE_FUELS, Validators.NOTHING)
+                (it)->(it.getItem() == ModItems.exhaustedLapis), (it)->(it.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)), Validators.NOTHING)
                 .setCanExtract(SLOT_EXHAUSTED, false)
                 .setCanExtract(SLOT_BOOKSHELF, false)
                 .withName(ModBlocks.infuser.getUnlocalizedName() + ".name");
@@ -68,14 +67,14 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     public void update() {
         if (!world.isRemote) {
             if (processItem()) {
-                if (consumeFuel()) currentProcessTime++;
-                if (items.getStackInSlot(SLOT_LAPIS).isEmpty()) {
+                if (consumeFuel()) currentProcessTime++; else dischargeProgress();
+                if (items.getStackInSlot(SLOT_EXHAUSTED).isEmpty()) {
                     currentProcessTime = 0;
                 }
                 if (currentProcessTime >= processLength) {
-                    items.extractItem(SLOT_LAPIS, 1, false);
-                    items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), false);
-                    tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), true);
+                    items.extractItem(SLOT_EXHAUSTED, 1, false);
+                    items.extractItem(SLOT_BOOKSHELF, 1, false);
+                    items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), false);
                     currentProcessTime = 0;
                 }
             } else if (currentFuelTime > 0) {
@@ -136,14 +135,14 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     }
 
     private boolean processItem() {
-        ItemStack itemExtracted = items.extractItem(SLOT_LAPIS, 1, true);
-        ItemStack itemInserted = items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), true);
-        int tankFilled = tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), false);
-        if (itemExtracted.isEmpty()) {
+        ItemStack exhaustedExtracted = items.extractItem(SLOT_EXHAUSTED, 1, true);
+        ItemStack bookshelfExtracted = items.extractItem(SLOT_BOOKSHELF, 1, true);
+        ItemStack itemInserted = items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), true);
+        if (exhaustedExtracted.isEmpty()) {
+            return false;
+        } else if (bookshelfExtracted.isEmpty()) {
             return false;
         } else if (!itemInserted.isEmpty()) {
-            return false;
-        } else if (tankFilled != 100) {
             return false;
         } else {
             return true;
@@ -152,17 +151,24 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
 
     private boolean consumeFuel() {
         if (currentFuelTime == 0) {
-            ItemStack usedFuel = items.extractItem(SLOT_BOOKSHELF, 1, false);
-            if (!usedFuel.isEmpty() && !items.getStackInSlot(SLOT_LAPIS).isEmpty()) {
-                int newFuelTicks = TileEntityFurnace.getItemBurnTime(usedFuel);
-                maxFuelTime = newFuelTicks;
-                currentFuelTime = newFuelTicks;
-                System.out.println("New fuel added! At " + currentFuelTime + " out of " + maxFuelTime + " fuel ticks.");
+            FluidStack usedFuel = tank.drain(1, true);
+            if (usedFuel != null && !items.getStackInSlot(SLOT_EXHAUSTED).isEmpty() && !items.getStackInSlot(SLOT_BOOKSHELF).isEmpty()) {
+                currentFuelTime = maxFuelTime;
             } else {
                 return false;
             }
         }
         currentFuelTime --;
+        return true;
+    }
+
+    private boolean dischargeProgress() {
+        if (currentDischargeTicks == 0 && currentProcessTime > 0) {
+            currentProcessTime--;
+            currentDischargeTicks = 5;
+        } else {
+            currentDischargeTicks--;
+        }
         return true;
     }
 
@@ -193,7 +199,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     @SuppressWarnings("unchecked")
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return (T) FluidAccess.extractOnly(tank);
+            return (T) FluidAccess.insertOnly(tank);
         } else if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) new ValidatedItemHandlerView(items);
         } else {
