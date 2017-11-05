@@ -5,6 +5,7 @@ item.exhausted_lapis.name=Exhausted Lapis
 fluid.opaline=Opaline
 fluid.lazurite=Lazurite
 tile.distiller.name=Opaline Distiller
+tile.infuser.name=Opaline Infuser
 
 
 itemGroup.opaline=Opaline

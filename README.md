@@ -24,5 +24,5 @@ Currently implemented:
 - [ ] Enchantment Scrubber
 - [ ] Lazurite Centrifuge
 - [ ] Lazure Anvil
-- [ ] Opaline Infuser
+- [x] Opaline Infuser
 - [ ] Future uses of Opaline

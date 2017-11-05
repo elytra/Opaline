@@ -26,6 +26,11 @@ public class BlockInfuser extends BlockTileEntity<TileEntityInfuser> implements 
     public static PropertyDirection FACING = BlockHorizontal.FACING;
     public static int FACE = 3;
 
+    private static final AxisAlignedBB n = new AxisAlignedBB(1/8.0, 0.0D, 1/8.0, 7/8.0, 5/8.0, 7/8.0);
+    private static final AxisAlignedBB s = new AxisAlignedBB(1/8.0, 0.0D, 1/8.0, 7/8.0, 5/8.0, 7/8.0);
+    private static final AxisAlignedBB e = new AxisAlignedBB(1/8.0, 0.0D, 1/8.0, 7/8.0, 5/8.0, 7/8.0);
+    private static final AxisAlignedBB w = new AxisAlignedBB(1/8.0, 0.0D, 1/8.0, 7/8.0, 5/8.0, 7/8.0);
+
     public BlockInfuser() {
         super(Material.ROCK, "infuser");
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -76,15 +81,18 @@ public class BlockInfuser extends BlockTileEntity<TileEntityInfuser> implements 
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos){
-        AxisAlignedBB n = new AxisAlignedBB(1/16.0, 0.0D, 4/16.0, 15/16.0,   15/16.0, 12/16.0);
-        AxisAlignedBB s = new AxisAlignedBB(1/16.0, 0.0D, 4/16.0, 15/16.0,   15/16.0, 12/16.0);
-        AxisAlignedBB e = new AxisAlignedBB(4/16.0, 0.0D, 1/16.0, 12/16.0, 15/16.0, 15/16.0);
-        AxisAlignedBB w = new AxisAlignedBB(4/16.0, 0.0D, 1/16.0, 12/16.0, 15/16.0, 15/16.0);
-        if(state.getValue(FACING) == EnumFacing.NORTH){return n;}
-        if(state.getValue(FACING) == EnumFacing.SOUTH){return s;}
-        if(state.getValue(FACING) == EnumFacing.EAST){return e;}
-        if(state.getValue(FACING) == EnumFacing.WEST){return w;}
-        return null; //this should NEVER happen
+        switch(state.getValue(FACING)) {
+            case NORTH:
+                return n;
+            case SOUTH:
+                return s;
+            case EAST:
+                return e;
+            case WEST:
+                return w;
+            default:
+                throw new AssertionError("Case missing for Infuser AABB"); //this should NEVER happen
+        }
     }
 
     @Override
