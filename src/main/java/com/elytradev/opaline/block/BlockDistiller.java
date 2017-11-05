@@ -11,6 +11,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -20,6 +22,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class BlockDistiller extends BlockTileEntity<TileEntityDistiller> implements IBlockBase {
 
@@ -77,6 +81,21 @@ public class BlockDistiller extends BlockTileEntity<TileEntityDistiller> impleme
     public BlockDistiller setCreativeTab(CreativeTabs tab) {
         super.setCreativeTab(Opaline.creativeTab);
         return this;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TileEntityDistiller tile = getTileEntity(world, pos);
+        IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+        ItemStack stack1 = itemHandler.getStackInSlot(tile.SLOT_LAPIS);
+        ItemStack stack2 = itemHandler.getStackInSlot(tile.SLOT_FUEL);
+        ItemStack stack3 = itemHandler.getStackInSlot(tile.SLOT_EXHAUSTED);
+        if(!stack1.isEmpty() || !stack2.isEmpty() || !stack3.isEmpty()) {
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack1);
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack2);
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack3);
+        }
+        super.breakBlock(world, pos, state);
     }
 
     @Override

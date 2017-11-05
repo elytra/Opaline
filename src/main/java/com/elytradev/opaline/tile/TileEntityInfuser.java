@@ -40,7 +40,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     private int currentDischargeTicks;
     public int ticksExisted;
     public static final int SLOT_EXHAUSTED = 0;
-    public static final int SLOT_BOOKSHELF = 1;
+    public static final int SLOT_CATALYST = 1;
     public static final int SLOT_LAPIS = 2;
 
     public TileEntityInfuser() {
@@ -48,7 +48,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         this.items = new ConcreteItemStorage(3).withValidators(
                 (it)->(it.getItem() == ModItems.exhaustedLapis), (it)->(it.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)), Validators.NOTHING)
                 .setCanExtract(SLOT_EXHAUSTED, false)
-                .setCanExtract(SLOT_BOOKSHELF, false)
+                .setCanExtract(SLOT_CATALYST, false)
                 .withName(ModBlocks.infuser.getUnlocalizedName() + ".name");
         tank.listen(this::markDirty);
         items.listen(this::markDirty);
@@ -69,7 +69,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
                 }
                 if (currentProcessTime >= processLength) {
                     items.extractItem(SLOT_EXHAUSTED, 1, false);
-                    items.extractItem(SLOT_BOOKSHELF, 1, false);
+                    //items.extractItem(SLOT_CATALYST, 1, false);
                     items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), false);
                     currentProcessTime = 0;
                 }
@@ -132,12 +132,12 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
 
     private boolean processItem() {
         ItemStack exhaustedExtracted = items.extractItem(SLOT_EXHAUSTED, 1, true);
-        ItemStack bookshelfExtracted = items.extractItem(SLOT_BOOKSHELF, 1, true);
+        //ItemStack bookshelfExtracted = items.extractItem(SLOT_CATALYST, 1, true);
         ItemStack itemInserted = items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), true);
         if (exhaustedExtracted.isEmpty()) {
             return false;
-        } else if (bookshelfExtracted.isEmpty()) {
-            return false;
+        //} else if (bookshelfExtracted.isEmpty()) {
+        //    return false;
         } else if (!itemInserted.isEmpty()) {
             return false;
         } else {
@@ -148,7 +148,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     private boolean consumeFuel() {
         if (currentFuelTime == 0) {
             FluidStack usedFuel = tank.drain(1, true);
-            if (usedFuel != null && !items.getStackInSlot(SLOT_EXHAUSTED).isEmpty() && !items.getStackInSlot(SLOT_BOOKSHELF).isEmpty()) {
+            if (usedFuel != null && !items.getStackInSlot(SLOT_EXHAUSTED).isEmpty()) {
                 currentFuelTime = maxFuelTime;
             } else {
                 return false;
