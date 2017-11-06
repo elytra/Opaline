@@ -2,8 +2,10 @@ package com.elytradev.opaline.proxy;
 
 import com.elytradev.opaline.Opaline;
 import com.elytradev.opaline.client.RenderDistiller;
+import com.elytradev.opaline.client.RenderInfuser;
 import com.elytradev.opaline.tile.TileEntityDistiller;
 
+import com.elytradev.opaline.tile.TileEntityInfuser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +17,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDistiller.class, new RenderDistiller());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new RenderInfuser());
     }
     
     @Override
