@@ -33,7 +33,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
     @Override
     public void render(TileEntityInfuser te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         IBlockState ibs = te.getWorld().getBlockState(te.getPos());
-        if (ibs.getBlock() != ModBlocks.distiller) return;
+        if (ibs.getBlock() != ModBlocks.infuser) return;
         FluidStack fluid = te.tank.getFluid();
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
@@ -73,9 +73,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
         }
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         dummy.setItem(te.items.getStackInSlot(TileEntityInfuser.SLOT_LAPIS));
-        rei.doRender(dummy, 1.4f, 0, 1, 0, partialTicks);
-        dummy.setItem(te.items.getStackInSlot(TileEntityInfuser.SLOT_EXHAUSTED));
-        rei.doRender(dummy, 1.4f, 0, 1, 0, partialTicks);
+        rei.doRender(dummy, 0.75f, 0.85f, 1, 0, partialTicks);
         GlStateManager.popMatrix();
         super.render(te, x, y, z, partialTicks, destroyStage, alpha);
     }
