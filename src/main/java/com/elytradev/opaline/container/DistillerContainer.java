@@ -1,7 +1,11 @@
 package com.elytradev.opaline.container;
 
 import com.elytradev.concrete.inventory.gui.ConcreteContainer;
-import com.elytradev.concrete.inventory.gui.widget.*;
+import com.elytradev.concrete.inventory.gui.widget.WBar;
+import com.elytradev.concrete.inventory.gui.widget.WFluidBar;
+import com.elytradev.concrete.inventory.gui.widget.WItemSlot;
+import com.elytradev.concrete.inventory.gui.widget.WPanel;
+import com.elytradev.concrete.inventory.gui.widget.WPlainPanel;
 import com.elytradev.opaline.Opaline;
 import com.elytradev.opaline.tile.TileEntityDistiller;
 import net.minecraft.inventory.IInventory;
