@@ -6,6 +6,7 @@ fluid.opaline=Opaline
 fluid.lazurite=Lazurite
 tile.distiller.name=Opaline Distiller
 tile.infuser.name=Opaline Infuser
+tile.multi_tank.name=Tri-Tank
 
 
 itemGroup.opaline=Opaline
