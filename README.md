@@ -1,10 +1,10 @@
-<img src="https://unascribed.com/f/a231ace4_trumpet.png" align="right" width="180px"/>
+<img src="http://bbkr.space/assets/opaline%20logo%20big.png" align="right" width="180px"/>
 
 # Opaline
 
 [>> Downloads <<](https://github.com/elytra/opaline/releases)
 
-*Oops, I spilled my books all over the table!*
+*MAGIC JUICE!*
 
 **This mod is open source and under a permissive license.** All Elytra mods are,
 and as such, can be included in any modpack on any platform without prior
@@ -21,8 +21,9 @@ Opaline the mod is an in-development mod designed to make the enchanting process
 Currently implemented:
 
 - [x] Opaline Distiller
+- [x] Opaline Infuser
+- [x] Tri-Tank
 - [ ] Enchantment Scrubber
 - [ ] Lazurite Centrifuge
 - [ ] Lazure Anvil
-- [x] Opaline Infuser
 - [ ] Future uses of Opaline
