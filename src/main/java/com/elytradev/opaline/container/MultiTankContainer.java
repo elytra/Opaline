@@ -25,9 +25,9 @@ public class MultiTankContainer extends ConcreteContainer {
         WPlainPanel panel = new WPlainPanel();
         setRootPanel(panel);
         WPanel playerInv = this.createPlayerInventoryPanel();
-        WFluidBar tankRed = new WFluidBar(redTankBG, redTankFG, multiTank.tankRed).withTooltip("%d/%d mB");
-        WFluidBar tankBlue = new WFluidBar(blueTankBG, blueTankFG, multiTank.tankBlue).withTooltip("%d/%d mB");
-        WFluidBar tankGreen = new WFluidBar(greenTankBG, greenTankFG, multiTank.tankGreen).withTooltip("%d/%d mB");
+        WFluidBar tankRed = new WFluidBar(redTankBG, redTankFG, multiTank.tankRed).withTooltip("%d/%d mB %3$s");
+        WFluidBar tankBlue = new WFluidBar(blueTankBG, blueTankFG, multiTank.tankBlue).withTooltip("%d/%d mB %3$s");
+        WFluidBar tankGreen = new WFluidBar(greenTankBG, greenTankFG, multiTank.tankGreen).withTooltip("%d/%d mB %3$s");
         panel.add(playerInv, 0, 87);
         panel.add(tankRed, 40, 16, 12, 40);
         panel.add(tankBlue, 112, 16, 12, 40);
