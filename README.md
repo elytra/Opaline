@@ -1,4 +1,4 @@
-<img src="http://bbkr.space/assets/opaline%20logo%20big.png" align="right" width="180px"/>
+<img src="http://bbkr.space/assets/opaline.png" align="right" width="180px"/>
 
 # Opaline
 
