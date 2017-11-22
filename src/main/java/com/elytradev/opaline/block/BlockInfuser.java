@@ -89,8 +89,8 @@ public class BlockInfuser extends BlockTileEntity<TileEntityInfuser> implements 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntityInfuser tile = getTileEntity(world, pos);
         IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
-        ItemStack stack1 = itemHandler.getStackInSlot(tile.SLOT_EXHAUSTED);
-        ItemStack stack2 = itemHandler.getStackInSlot(tile.SLOT_CATALYST);
+        ItemStack stack1 = itemHandler.getStackInSlot(tile.SLOT_CATALYST);
+        ItemStack stack2 = itemHandler.getStackInSlot(tile.SLOT_INGREDIENT);
         ItemStack stack3 = itemHandler.getStackInSlot(tile.SLOT_LAPIS);
         if(!stack1.isEmpty() || !stack2.isEmpty() || !stack3.isEmpty()) {
             InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack1);
