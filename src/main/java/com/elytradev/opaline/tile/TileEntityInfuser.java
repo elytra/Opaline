@@ -39,16 +39,16 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     private int maxFuelTime = 5;
     private int currentDischargeTicks;
     public int ticksExisted;
-    public static final int SLOT_EXHAUSTED = 0;
-    public static final int SLOT_CATALYST = 1;
+    public static final int SLOT_CATALYST = 0;
+    public static final int SLOT_INGREDIENT = 1;
     public static final int SLOT_LAPIS = 2;
 
     public TileEntityInfuser() {
         this.tank = new ConcreteFluidTank(10).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidOpaline));
         this.items = new ConcreteItemStorage(3).withValidators(
                 (it)->(it.getItem() == ModItems.exhaustedLapis), (it)->(it.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)), Validators.NOTHING)
-                .setCanExtract(SLOT_EXHAUSTED, false)
                 .setCanExtract(SLOT_CATALYST, false)
+                .setCanExtract(SLOT_INGREDIENT, false)
                 .withName(ModBlocks.infuser.getUnlocalizedName() + ".name");
         tank.listen(this::markDirty);
         items.listen(this::markDirty);
@@ -64,12 +64,12 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         if (!world.isRemote) {
             if (processItem()) {
                 if (consumeFuel()) currentProcessTime++; else dischargeProgress();
-                if (items.getStackInSlot(SLOT_EXHAUSTED).isEmpty()) {
+                if (items.getStackInSlot(SLOT_CATALYST).isEmpty()) {
                     currentProcessTime = 0;
                 }
                 if (currentProcessTime >= processLength) {
-                    items.extractItem(SLOT_EXHAUSTED, 1, false);
-                    //items.extractItem(SLOT_CATALYST, 1, false);
+                    items.extractItem(SLOT_CATALYST, 1, false);
+                    //items.extractItem(SLOT_INGREDIENT, 1, false);
                     items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), false);
                     currentProcessTime = 0;
                 }
@@ -131,8 +131,8 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     }
 
     private boolean processItem() {
-        ItemStack exhaustedExtracted = items.extractItem(SLOT_EXHAUSTED, 1, true);
-        //ItemStack bookshelfExtracted = items.extractItem(SLOT_CATALYST, 1, true);
+        ItemStack exhaustedExtracted = items.extractItem(SLOT_CATALYST, 1, true);
+        //ItemStack bookshelfExtracted = items.extractItem(SLOT_INGREDIENT, 1, true);
         ItemStack itemInserted = items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), true);
         if (exhaustedExtracted.isEmpty()) {
             return false;
@@ -148,7 +148,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     private boolean consumeFuel() {
         if (currentFuelTime == 0) {
             FluidStack usedFuel = tank.drain(1, true);
-            if (usedFuel != null && !items.getStackInSlot(SLOT_EXHAUSTED).isEmpty()) {
+            if (usedFuel != null && !items.getStackInSlot(SLOT_CATALYST).isEmpty()) {
                 currentFuelTime = maxFuelTime;
             } else {
                 return false;
@@ -160,7 +160,6 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
 
     private boolean dischargeProgress() {
         if (currentDischargeTicks == 0 && currentProcessTime > 0) {
-            System.out.println("Discharge hit 0, decreasing process time");
             currentProcessTime--;
             currentDischargeTicks = 5;
         } else {

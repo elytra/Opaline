@@ -22,14 +22,14 @@ public class InfuserContainer extends ConcreteContainer {
         super(player, container);
         WPlainPanel panel = new WPlainPanel();
         setRootPanel(panel);
-        WItemSlot slotExhausted = WItemSlot.of(container, 0);
-        WItemSlot slotBookshelf = WItemSlot.of(container, 1);
+        WItemSlot slotCatalyst = WItemSlot.of(container, 0);
+        WItemSlot slotIngredient = WItemSlot.of(container, 1);
         WItemSlot slotLapis = WItemSlot.outputOf(container, 2);
         WPanel playerInv = this.createPlayerInventoryPanel();
         WFluidBar tankOpaline = new WFluidBar(tankBG, tankFG, infuser.tank).withTooltip("%d/%d mB");
         WBar progressTicks = new WBar(arrowBG, arrowFG, container, 2, 3, WBar.Direction.RIGHT).withTooltip("%d/%d ticks");
-        panel.add(slotExhausted, 48, 16);
-        panel.add(slotBookshelf, 48, 52);
+        panel.add(slotCatalyst, 48, 16);
+        panel.add(slotIngredient, 48, 52);
         panel.add(slotLapis, 105, 33);
         panel.add(playerInv, 0, 87);
         panel.add(tankOpaline, 50, 35, 12, 14);
