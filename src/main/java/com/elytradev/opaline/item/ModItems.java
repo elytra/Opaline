@@ -7,7 +7,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class ModItems {
 
     public static ItemBase exhaustedLapis = new ItemBase("exhausted_lapis").setCreativeTab(Opaline.creativeTab);
-    public static ItemBase logoFake = new ItemBase("logo_fake");
+    public static ItemTooltip logoFake = new ItemTooltip("logo_fake").setCreativeTab(Opaline.creativeTab);
 
     public static ItemBase[] allItems = {
             exhaustedLapis, logoFake

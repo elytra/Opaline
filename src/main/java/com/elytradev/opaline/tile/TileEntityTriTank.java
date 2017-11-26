@@ -21,15 +21,15 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityMultiTank extends TileEntity implements IContainerInventoryHolder {
+public class TileEntityTriTank extends TileEntity implements IContainerInventoryHolder {
 
     public ConcreteItemStorage inv;
     public ConcreteFluidTank tankRed;
     public ConcreteFluidTank tankBlue;
     public ConcreteFluidTank tankGreen;
 
-    public TileEntityMultiTank() {
-        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.multiTank.getUnlocalizedName() + ".name");
+    public TileEntityTriTank() {
+        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.triTank.getUnlocalizedName() + ".name");
         this.tankRed = new ConcreteFluidTank(1000);
         this.tankBlue = new ConcreteFluidTank(1000);
         this.tankGreen = new ConcreteFluidTank(1000);

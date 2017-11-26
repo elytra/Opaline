@@ -6,12 +6,12 @@ import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.client.OpalineTab;
 import com.elytradev.opaline.container.DistillerContainer;
 import com.elytradev.opaline.container.InfuserContainer;
-import com.elytradev.opaline.container.MultiTankContainer;
+import com.elytradev.opaline.container.TriTankContainer;
 import com.elytradev.opaline.item.ModItems;
 import com.elytradev.opaline.proxy.CommonProxy;
 import com.elytradev.opaline.tile.TileEntityDistiller;
 import com.elytradev.opaline.tile.TileEntityInfuser;
-import com.elytradev.opaline.tile.TileEntityMultiTank;
+import com.elytradev.opaline.tile.TileEntityTriTank;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -73,9 +73,9 @@ public class Opaline {
                                 player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
                                 (TileEntityInfuser)world.getTileEntity(new BlockPos(x,y,z)));
                     case MULTI_TANK:
-                        return new MultiTankContainer(
+                        return new TriTankContainer(
                                 player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
-                                (TileEntityMultiTank)world.getTileEntity(new BlockPos(x,y,z)));
+                                (TileEntityTriTank)world.getTileEntity(new BlockPos(x,y,z)));
                     default:
                         return null;
                 }
@@ -98,9 +98,9 @@ public class Opaline {
                                 (TileEntityInfuser)world.getTileEntity(new BlockPos(x,y,z)));
                         return new ConcreteGui(infuserContainer);
                     case MULTI_TANK:
-                        MultiTankContainer multiTankContainer = new MultiTankContainer(
+                        TriTankContainer multiTankContainer = new TriTankContainer(
                                 player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
-                                (TileEntityMultiTank) world.getTileEntity(new BlockPos(x,y,z)));
+                                (TileEntityTriTank) world.getTileEntity(new BlockPos(x,y,z)));
                         return new ConcreteGui(multiTankContainer);
                     default:
                         return null;

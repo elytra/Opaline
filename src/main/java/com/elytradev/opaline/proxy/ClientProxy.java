@@ -3,11 +3,11 @@ package com.elytradev.opaline.proxy;
 import com.elytradev.opaline.Opaline;
 import com.elytradev.opaline.client.RenderDistiller;
 import com.elytradev.opaline.client.RenderInfuser;
-import com.elytradev.opaline.client.RenderMultiTank;
+import com.elytradev.opaline.client.RenderTriTank;
 import com.elytradev.opaline.tile.TileEntityDistiller;
 
 import com.elytradev.opaline.tile.TileEntityInfuser;
-import com.elytradev.opaline.tile.TileEntityMultiTank;
+import com.elytradev.opaline.tile.TileEntityTriTank;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +20,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDistiller.class, new RenderDistiller());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new RenderInfuser());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMultiTank.class, new RenderMultiTank());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTriTank.class, new RenderTriTank());
     }
     
     @Override

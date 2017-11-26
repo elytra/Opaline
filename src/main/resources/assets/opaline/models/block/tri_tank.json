@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"red-blue-horiz": "opaline:blocks/multitank-1",
-		"green-part-vert": "opaline:blocks/multitank-2",
-		"particle": "opaline:blocks/multitank-2"
+		"red-blue-horiz": "opaline:blocks/tri_tank-1",
+		"green-part-vert": "opaline:blocks/tri_tank-2",
+		"particle": "opaline:blocks/tri_tank-2"
 	},
 	"elements": [
 		{

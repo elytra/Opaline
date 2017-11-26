@@ -1,7 +1,7 @@
 package com.elytradev.opaline.block;
 
 import com.elytradev.opaline.Opaline;
-import com.elytradev.opaline.tile.TileEntityMultiTank;
+import com.elytradev.opaline.tile.TileEntityTriTank;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockMultiTank extends BlockTileEntity<TileEntityMultiTank> implements IBlockBase {
+public class BlockTriTank extends BlockTileEntity<TileEntityTriTank> implements IBlockBase {
 
     public static PropertyDirection FACING = BlockHorizontal.FACING;
     public static int FACE = 3;
@@ -31,8 +31,8 @@ public class BlockMultiTank extends BlockTileEntity<TileEntityMultiTank> impleme
     private static final AxisAlignedBB e = new AxisAlignedBB(0.0, 0.0D, 0.0, 1.0, 1.0, 1.0);
     private static final AxisAlignedBB w = new AxisAlignedBB(0.0, 0.0D, 0.0, 1.0, 1.0, 1.0);
 
-    public BlockMultiTank() {
-        super(Material.ROCK, "multi_tank");
+    public BlockTriTank() {
+        super(Material.ROCK, "tri_tank");
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
@@ -64,24 +64,24 @@ public class BlockMultiTank extends BlockTileEntity<TileEntityMultiTank> impleme
     }
 
     @Override
-    public Class<TileEntityMultiTank> getTileEntityClass() {
-        return TileEntityMultiTank.class;
+    public Class<TileEntityTriTank> getTileEntityClass() {
+        return TileEntityTriTank.class;
     }
 
     @Override
-    public TileEntityMultiTank createTileEntity(World world, IBlockState state) {
-        return new TileEntityMultiTank();
+    public TileEntityTriTank createTileEntity(World world, IBlockState state) {
+        return new TileEntityTriTank();
     }
 
     @Override
-    public BlockMultiTank setCreativeTab(CreativeTabs tab) {
+    public BlockTriTank setCreativeTab(CreativeTabs tab) {
         super.setCreativeTab(Opaline.creativeTab);
         return this;
     }
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        TileEntityMultiTank tile = getTileEntity(world, pos);
+        TileEntityTriTank tile = getTileEntity(world, pos);
         super.breakBlock(world, pos, state);
     }
 
@@ -97,7 +97,7 @@ public class BlockMultiTank extends BlockTileEntity<TileEntityMultiTank> impleme
             case WEST:
                 return w;
             default:
-                throw new AssertionError("Case missing for MultiTank AABB"); //this should NEVER happen
+                throw new AssertionError("Case missing for Tri-Tank AABB"); //this should NEVER happen
         }
     }
 

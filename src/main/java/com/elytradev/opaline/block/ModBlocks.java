@@ -4,7 +4,6 @@ import com.elytradev.opaline.Opaline;
 import com.elytradev.opaline.block.fluids.BlockLazurite;
 import com.elytradev.opaline.block.fluids.BlockOpaline;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +16,7 @@ public class ModBlocks {
 
     public static BlockDistiller distiller = new BlockDistiller().setCreativeTab(Opaline.creativeTab);
     public static BlockInfuser infuser = new BlockInfuser().setCreativeTab(Opaline.creativeTab);
-    public static BlockMultiTank multiTank = new BlockMultiTank().setCreativeTab(Opaline.creativeTab);
+    public static BlockTriTank triTank = new BlockTriTank().setCreativeTab(Opaline.creativeTab);
 
     public static Fluid fluidOpaline = new Fluid("opaline",
         new ResourceLocation("opaline", "blocks/fluids/opaline_still"),
@@ -33,7 +32,7 @@ public class ModBlocks {
             .setRarity(EnumRarity.RARE);
 
     public static IBlockBase[] allBlocks = {
-        distiller, infuser, multiTank
+        distiller, infuser, triTank
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -56,7 +55,7 @@ public class ModBlocks {
 
         GameRegistry.registerTileEntity(distiller.getTileEntityClass(), distiller.getRegistryName().toString());
         GameRegistry.registerTileEntity(infuser.getTileEntityClass(), infuser.getRegistryName().toString());
-        GameRegistry.registerTileEntity(multiTank.getTileEntityClass(), multiTank.getRegistryName().toString());
+        GameRegistry.registerTileEntity(triTank.getTileEntityClass(), triTank.getRegistryName().toString());
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {

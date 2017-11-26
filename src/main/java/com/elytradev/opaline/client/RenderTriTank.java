@@ -4,9 +4,8 @@ import java.lang.reflect.Field;
 
 import org.lwjgl.opengl.GL11;
 
-import com.elytradev.opaline.block.BlockMultiTank;
 import com.elytradev.opaline.block.ModBlocks;
-import com.elytradev.opaline.tile.TileEntityMultiTank;
+import com.elytradev.opaline.tile.TileEntityTriTank;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,16 +23,16 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-public class RenderMultiTank extends TileEntitySpecialRenderer<TileEntityMultiTank> {
+public class RenderTriTank extends TileEntitySpecialRenderer<TileEntityTriTank> {
     private static final Field age = ReflectionHelper.findField(EntityItem.class, "field_70292_b", "age");
 
     private RenderEntityItem rei;
     private EntityItem dummy;
 
     @Override
-    public void render(TileEntityMultiTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileEntityTriTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         IBlockState ibs = te.getWorld().getBlockState(te.getPos());
-        if (ibs.getBlock() != ModBlocks.multiTank) return;
+        if (ibs.getBlock() != ModBlocks.triTank) return;
         FluidStack fluidRed = te.tankRed.getFluid();
         FluidStack fluidBlue = te.tankBlue.getFluid();
         FluidStack fluidGreen = te.tankGreen.getFluid();
