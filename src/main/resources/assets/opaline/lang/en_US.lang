@@ -1,10 +1,6 @@
 #items
 item.exhausted_lapis.name=Exhausted Lapis
 item.logo_fake.name=Visionary Hypercore
-tooltip.opaline.logo_fake.0=§5§kwh§r§5You shouldn't have this.§5§kat
-tooltip.opaline.logo_fake.1=§5However, while you do, why not mess around?
-tooltip.opaline.logo_fake.2=§6Look at an Opaline tile entity to see its internal variables.
-tooltip.opaline.logo_fake.3=§6Shift-right-click on a tank to fill it with NBT Lazurite.
 
 #blocks
 fluid.opaline=Opaline
@@ -12,5 +8,16 @@ fluid.lazurite=Lazurite
 tile.distiller.name=Opaline Distiller
 tile.infuser.name=Opaline Infuser
 tile.tri_tank.name=Tri-Tank
+
+#tooltips
+tooltip.opaline.logo_fake.0=§5§kwh§r§5You shouldn't have this.§5§kat
+tooltip.opaline.logo_fake.1=§5However, while you do, why not mess around?
+tooltip.opaline.logo_fake.2=§6Look at an Opaline tile entity to see its internal variables.
+tooltip.opaline.logo_fake.3=§6Sneak-Use on a tank to fill it with NBT Lazurite.
+
+#messages
+opaline.msg.tankFull=Tank already has fluids; cannot fill.
+opaline.msg.noTank=No tank in block; cannot fill.
+opaline.msg.noTE=This block is not a tile entity; cannot fill.
 
 itemGroup.opaline=Opaline

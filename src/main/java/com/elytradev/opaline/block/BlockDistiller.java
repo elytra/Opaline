@@ -61,7 +61,7 @@ public class BlockDistiller extends BlockTileEntity<TileEntityDistiller> impleme
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!world.isRemote) {
+        if(!world.isRemote && !player.isSneaking()) {
             player.openGui(Opaline.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
