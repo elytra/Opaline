@@ -30,6 +30,10 @@ public class InfuserRecipe implements ICustomRecipe<InfuserRecipe, ItemStack> {
         return this;
     }
 
+    public Integer getProcessTime() {
+        return this.processTime;
+    }
+
     @Override
     public ResourceLocation getRegistryName() {
         return this.registryName;

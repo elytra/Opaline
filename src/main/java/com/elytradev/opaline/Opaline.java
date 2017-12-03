@@ -12,12 +12,14 @@ import com.elytradev.opaline.proxy.CommonProxy;
 import com.elytradev.opaline.tile.TileEntityDistiller;
 import com.elytradev.opaline.tile.TileEntityInfuser;
 import com.elytradev.opaline.tile.TileEntityTriTank;
+import com.elytradev.opaline.util.OpalineRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -56,6 +58,7 @@ public class Opaline {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         System.out.println(name + " is loading!");
+        MinecraftForge.EVENT_BUS.register(OpalineRecipes.class);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new IGuiHandler() {
             public static final int DISTILLER = 0;
             public static final int INFUSER = 1;

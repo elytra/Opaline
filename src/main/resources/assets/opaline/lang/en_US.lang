@@ -12,7 +12,7 @@ tile.tri_tank.name=Tri-Tank
 #tooltips
 tooltip.opaline.logo_fake.0=§5§kwh§r§5You shouldn't have this.§5§kat
 tooltip.opaline.logo_fake.1=§5However, while you do, why not mess around?
-tooltip.opaline.logo_fake.2=§6Look at an Opaline tile entity to see its internal variables.
+tooltip.opaline.logo_fake.2=§6Look at an Opaline tile entity to see its internal variables. (NYI)
 tooltip.opaline.logo_fake.3=§6Sneak-Use on a tank to fill it with NBT Lazurite.
 
 #messages

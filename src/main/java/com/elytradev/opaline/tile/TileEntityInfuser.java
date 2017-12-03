@@ -4,6 +4,8 @@ import com.elytradev.concrete.inventory.*;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.item.ModItems;
 import com.elytradev.opaline.util.FluidAccess;
+import com.elytradev.opaline.util.recipe.InfuserRecipe;
+import com.elytradev.opaline.util.recipe.MachineRecipes;
 import com.google.common.base.Predicates;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,6 +28,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
 
@@ -34,19 +38,27 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     public ConcreteFluidTank tank;
     public ConcreteItemStorage items;
     private int currentProcessTime;
-    private static final int processLength = 500;
+    private int processLength;
     private int currentFuelTime;
     private int maxFuelTime = 5;
     private int currentDischargeTicks;
+    private int cooldown;
+    private static final int maxCooldown = 40;
     public int ticksExisted;
     public static final int SLOT_CATALYST = 0;
     public static final int SLOT_INGREDIENT = 1;
     public static final int SLOT_LAPIS = 2;
 
+    public static boolean oreMatches(String oreName, ItemStack stack) {
+        if (oreName == null) return false;
+        int oreId = OreDictionary.getOreID(oreName);
+        return ArrayUtils.contains(OreDictionary.getOreIDs(stack), oreId);
+    }
+
     public TileEntityInfuser() {
         this.tank = new ConcreteFluidTank(10).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidOpaline));
         this.items = new ConcreteItemStorage(3).withValidators(
-                (it)->(it.getItem() == ModItems.exhaustedLapis), (it)->(it.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)), Validators.NOTHING)
+                (it)->(it.getItem() == ModItems.exhaustedLapis), (it)->oreMatches("gemLapis", it), Validators.NOTHING)
                 .setCanExtract(SLOT_CATALYST, false)
                 .setCanExtract(SLOT_INGREDIENT, false)
                 .withName(ModBlocks.infuser.getUnlocalizedName() + ".name");
@@ -62,19 +74,35 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     @Override
     public void update() {
         if (!world.isRemote) {
-            if (processItem()) {
-                if (consumeFuel()) currentProcessTime++; else dischargeProgress();
-                if (items.getStackInSlot(SLOT_CATALYST).isEmpty()) {
-                    currentProcessTime = 0;
+            if (cooldown>0) cooldown--;
+            if (cooldown>0) {
+                this.markDirty();
+                return;
+            }
+
+            InfuserRecipe recipe = MachineRecipes.getInfuser(items);
+            if (recipe!=null) {
+                System.out.println("Recipe: "+recipe.toString());
+                processLength = recipe.getProcessTime();
+                boolean canFillOutput = items.insertItem(SLOT_LAPIS, recipe.getOutput(), true).isEmpty();
+                if (recipe.matches(items) && canFillOutput) {
+                    if (consumeFuel()) currentProcessTime++;
+                    else dischargeProgress();
+                    if (items.getStackInSlot(SLOT_CATALYST).isEmpty()) {
+                        currentProcessTime = 0;
+                    }
+                    if (currentProcessTime >= processLength) {
+                        recipe.consumeIngredients(items);
+                        items.insertItem(SLOT_LAPIS, recipe.getOutput(), false);
+                        currentProcessTime = 0;
+                        cooldown = maxCooldown;
+                    }
+                } else if (currentFuelTime > 0) {
+                    consumeFuel();
                 }
-                if (currentProcessTime >= processLength) {
-                    items.extractItem(SLOT_CATALYST, 1, false);
-                    //items.extractItem(SLOT_INGREDIENT, 1, false);
-                    items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), false);
-                    currentProcessTime = 0;
-                }
-            } else if (currentFuelTime > 0) {
-                consumeFuel();
+            } else {
+                cooldown = maxCooldown;
+                System.out.println("No recipe available.");
             }
         }
         ticksExisted++;
@@ -127,21 +155,6 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
             if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
                 player.connection.sendPacket(packet);
             }
-        }
-    }
-
-    private boolean processItem() {
-        ItemStack exhaustedExtracted = items.extractItem(SLOT_CATALYST, 1, true);
-        //ItemStack bookshelfExtracted = items.extractItem(SLOT_INGREDIENT, 1, true);
-        ItemStack itemInserted = items.insertItem(SLOT_LAPIS, new ItemStack(Items.DYE, 1, 4), true);
-        if (exhaustedExtracted.isEmpty()) {
-            return false;
-        //} else if (bookshelfExtracted.isEmpty()) {
-        //    return false;
-        } else if (!itemInserted.isEmpty()) {
-            return false;
-        } else {
-            return true;
         }
     }
 

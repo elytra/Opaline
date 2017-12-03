@@ -31,7 +31,7 @@ public class itemDebugger extends ItemBase {
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
-        if (!player.isSneaking()) {
+        if (player.isSneaking()) {
             if (te != null) {
                 if (te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
                     IFluidHandler tank = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
