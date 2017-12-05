@@ -1,0 +1,28 @@
+{
+    "display": {
+        "title": "Distiller Discovery!",
+        "description": "Craft a Distiller to start turning Lapis Lazuli into Opaline.",
+        "icon": {
+            "item": "opaline:distiller"
+        },
+        "frame": "goal"
+    },
+    "criteria": {
+        "get_distiller": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "opaline:distiller"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "loot": [
+            "opaline:prize/book"
+        ]
+    },
+    "parent": "opaline:main/root"
+}

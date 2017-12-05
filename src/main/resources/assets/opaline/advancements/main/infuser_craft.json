@@ -1,0 +1,22 @@
+{
+    "display": {
+        "title": "We Have The Technology",
+        "description": "Create an Opaline Infuser to give a use to Exhausted Lapis.",
+        "icon": {
+            "item": "opaline:infuser"
+        }
+    },
+    "criteria": {
+        "get_infuser": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "opaline:infuser"
+                    }
+                ]
+            }
+        }
+    },
+    "parent": "opaline:main/exhausted_craft"
+}

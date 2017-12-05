@@ -1,0 +1,18 @@
+{
+    "display": {
+        "title": "Opaline",
+        "description": "A new form of enchanting and magic.",
+        "icon": {
+            "item": "opaline:logo_fake"
+        },
+        "background": "minecraft:textures/blocks/stone.png"
+    },
+    "criteria": {
+        "learn_infuser": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+                "recipe": "opaline:distiller_0"
+            }
+        }
+    }
+}

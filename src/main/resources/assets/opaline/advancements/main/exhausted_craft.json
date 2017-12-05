@@ -1,0 +1,22 @@
+{
+    "display": {
+        "title": "Distiller Success!",
+        "description": "Distill Lapis Lazuli into Opaline and Exhausted Lapis.",
+        "icon": {
+            "item": "opaline:exhausted_lapis"
+        }
+    },
+    "criteria": {
+        "get_exhausted_lapis": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "opaline:exhausted_lapis"
+                    }
+                ]
+            }
+        }
+    },
+    "parent": "opaline:main/distiller_craft"
+}
