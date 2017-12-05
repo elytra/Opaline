@@ -42,7 +42,7 @@ public class OpalineRecipes {
         // Infuser recipes
 
         ItemIngredient exhaustedLapis = ItemIngredient.of(ModItems.exhaustedLapis);
-        ItemIngredient lapis = ItemIngredient.of("GemLapis");
+        ItemIngredient lapis = ItemIngredient.of("gemLapis");
 
         InfuserRecipe remakeLapis = new InfuserRecipe(new ItemStack(Items.DYE, 2, 4),
                 exhaustedLapis,

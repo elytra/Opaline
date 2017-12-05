@@ -51,7 +51,7 @@ public class InfuserRecipe implements ICustomRecipe<InfuserRecipe, ItemStack> {
 
     public boolean matches(IItemHandler inventory) {
         boolean applyCheck = catalyst.apply(inventory.getStackInSlot(0)) && ingredient.apply(inventory.getStackInSlot(1));
-        boolean extractCheck = !inventory.extractItem(0,1,true).isEmpty() && !inventory.extractItem(0,1,true).isEmpty();
+        boolean extractCheck = !inventory.extractItem(0,1,true).isEmpty() && !inventory.extractItem(1,1,true).isEmpty();
         return applyCheck && extractCheck;
     }
 

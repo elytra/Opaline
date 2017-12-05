@@ -82,7 +82,6 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
 
             InfuserRecipe recipe = MachineRecipes.getInfuser(items);
             if (recipe!=null) {
-                System.out.println("Recipe: "+recipe.toString());
                 processLength = recipe.getProcessTime();
                 boolean canFillOutput = items.insertItem(SLOT_LAPIS, recipe.getOutput(), true).isEmpty();
                 if (recipe.matches(items) && canFillOutput) {
@@ -102,7 +101,6 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
                 }
             } else {
                 cooldown = maxCooldown;
-                System.out.println("No recipe available.");
             }
         }
         ticksExisted++;
