@@ -74,11 +74,6 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         items.listen(this::markDirty);
     }
 
-    @SideOnly(Side.CLIENT)
-    public int getTankScaled(int i){
-        return this.tank.getFluidAmount()*i/this.tank.getCapacity();
-    }
-
     @Override
     public void update() {
         if (!world.isRemote) {
@@ -124,7 +119,6 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         NBTTagCompound tag = super.writeToNBT(compound);
         tag.setTag("OutputTank", tank.writeToNBT(new NBTTagCompound()));
         tag.setTag("Inventory", items.serializeNBT());
-        tag.setInteger("progress", currentProcessTime);
         return tag;
     }
 
@@ -133,7 +127,6 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         super.readFromNBT(compound);
         tank.readFromNBT(compound.getCompoundTag("OutputTank"));
         items.deserializeNBT(compound.getCompoundTag("Inventory"));
-        compound.getInteger("progress");
     }
 
     @Override
@@ -174,7 +167,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     private boolean consumeFuel() {
         if (currentFuelTime == 0) {
             FluidStack usedFuel = tank.drain(1, true);
-            if (usedFuel != null && !items.getStackInSlot(SLOT_CATALYST).isEmpty()) {
+            if (usedFuel != null && MachineRecipes.getInfuser(items) != null) {
                 currentFuelTime = maxFuelTime;
             } else {
                 return false;
