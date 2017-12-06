@@ -36,6 +36,11 @@ public class ItemBase extends Item {
         this.oreName = oreDict;
     }
 
+    public ItemBase(String name, String oreDict){
+        this(name);
+        this.oreName = oreDict;
+    }
+
     public void registerItemModel() {
         Opaline.proxy.registerItemRenderer(this, 0, name);
     }

@@ -32,6 +32,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 public class TileEntityInfuser extends TileEntity implements ITickable, IContainerInventoryHolder {
 
@@ -57,10 +58,15 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         return ArrayUtils.contains(OreDictionary.getOreIDs(stack), oreId);
     }
 
+    public static final Predicate<ItemStack> INGREDIENTS = (it) -> {
+        if (oreMatches("gemLapis", it) || it.getItem() == Items.QUARTZ) return true;
+        else return false;
+    };
+
     public TileEntityInfuser() {
         this.tank = new ConcreteFluidTank(10).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidOpaline));
         this.items = new ConcreteItemStorage(3).withValidators(
-                (it)->(it.getItem() == ModItems.exhaustedLapis), (it)->oreMatches("gemLapis", it), Validators.NOTHING)
+                (it)->(it.getItem() == ModItems.exhaustedLapis), INGREDIENTS, Validators.NOTHING)
                 .setCanExtract(SLOT_CATALYST, false)
                 .setCanExtract(SLOT_INGREDIENT, false)
                 .withName(ModBlocks.infuser.getUnlocalizedName() + ".name");

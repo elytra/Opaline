@@ -43,11 +43,19 @@ public class OpalineRecipes {
 
         ItemIngredient exhaustedLapis = ItemIngredient.of(ModItems.exhaustedLapis);
         ItemIngredient lapis = ItemIngredient.of("gemLapis");
+        ItemIngredient quartz = ItemIngredient.of(Items.QUARTZ);
 
         InfuserRecipe remakeLapis = new InfuserRecipe(new ItemStack(Items.DYE, 2, 4),
                 exhaustedLapis,
-                lapis, 500);
+                lapis,
+                500);
         MachineRecipes.register(remakeLapis);
+
+        InfuserRecipe makeQuartzLapis = new InfuserRecipe(new ItemStack(ModItems.quartzLapis, 1),
+                exhaustedLapis,
+                quartz,
+                250);
+        MachineRecipes.register(makeQuartzLapis);
 
     }
 
