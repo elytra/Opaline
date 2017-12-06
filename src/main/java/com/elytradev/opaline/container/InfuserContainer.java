@@ -27,7 +27,7 @@ public class InfuserContainer extends ConcreteContainer {
         WItemSlot slotLapis = WItemSlot.outputOf(container, 2);
         WPanel playerInv = this.createPlayerInventoryPanel();
         WFluidBar tankOpaline = new WFluidBar(tankBG, tankFG, infuser.tank).withTooltip("%d/%d mB");
-        WBar progressTicks = new WBar(arrowBG, arrowFG, container, 2, 3, WBar.Direction.RIGHT).withTooltip("%d/%d ticks");
+        WBar progressTicks = new WBar(arrowBG, arrowFG, container, 2, 3, WBar.Direction.RIGHT).withTooltip("%d%%");
         panel.add(slotCatalyst, 48, 16);
         panel.add(slotIngredient, 48, 52);
         panel.add(slotLapis, 105, 33);

@@ -157,7 +157,6 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
                 int newFuelTicks = TileEntityFurnace.getItemBurnTime(usedFuel);
                 maxFuelTime = newFuelTicks;
                 currentFuelTime = newFuelTicks;
-                System.out.println("New fuel added! At " + currentFuelTime + " out of " + maxFuelTime + " fuel ticks.");
             } else {
                 return false;
             }

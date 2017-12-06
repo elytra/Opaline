@@ -38,16 +38,18 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     public ConcreteFluidTank tank;
     public ConcreteItemStorage items;
     private int currentProcessTime;
-    private int processLength;
+    private int processLength = 1;
     private int currentFuelTime;
     private int maxFuelTime = 5;
-    private int currentDischargeTicks;
+    private int currentDischargeTicks = 0;
     private int cooldown;
     private static final int maxCooldown = 40;
     public int ticksExisted;
     public static final int SLOT_CATALYST = 0;
     public static final int SLOT_INGREDIENT = 1;
     public static final int SLOT_LAPIS = 2;
+    public static final int MAX_PERCENT = 100;
+    public int currentPercent;
 
     public static boolean oreMatches(String oreName, ItemStack stack) {
         if (oreName == null) return false;
@@ -102,8 +104,13 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
             } else {
                 cooldown = maxCooldown;
             }
+            if (processLength == 0) {
+                processLength = 1;
+            }
+            currentPercent = 100 * currentProcessTime / processLength;
         }
         ticksExisted++;
+
     }
 
     @Override
@@ -111,6 +118,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         NBTTagCompound tag = super.writeToNBT(compound);
         tag.setTag("OutputTank", tank.writeToNBT(new NBTTagCompound()));
         tag.setTag("Inventory", items.serializeNBT());
+        tag.setInteger("progress", currentProcessTime);
         return tag;
     }
 
@@ -119,6 +127,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         super.readFromNBT(compound);
         tank.readFromNBT(compound.getCompoundTag("OutputTank"));
         items.deserializeNBT(compound.getCompoundTag("Inventory"));
+        compound.getInteger("progress");
     }
 
     @Override
@@ -170,11 +179,13 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     }
 
     private boolean dischargeProgress() {
-        if (currentDischargeTicks == 0 && currentProcessTime > 0) {
-            currentProcessTime--;
-            currentDischargeTicks = 5;
-        } else {
-            currentDischargeTicks--;
+        if (currentProcessTime > 0) {
+            if (currentDischargeTicks <= 0) {
+                currentProcessTime--;
+                currentDischargeTicks = 5;
+            } else {
+                currentDischargeTicks--;
+            }
         }
         return true;
     }
@@ -188,8 +199,8 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
         else {
             return view.withField(0, () -> currentFuelTime)
                     .withField(1, () -> maxFuelTime)
-                    .withField(2, () -> currentProcessTime)
-                    .withField(3, () -> processLength);
+                    .withField(2, () -> currentPercent)
+                    .withField(3, () -> MAX_PERCENT);
         }
     }
 
