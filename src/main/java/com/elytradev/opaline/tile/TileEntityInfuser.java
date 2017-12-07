@@ -95,7 +95,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
                     }
                     if (currentProcessTime >= processLength) {
                         recipe.consumeIngredients(items);
-                        items.insertItem(SLOT_LAPIS, recipe.getOutput(), false);
+                        items.insertItem(SLOT_LAPIS, recipe.getOutput().copy(), false);
                         currentProcessTime = 0;
                         cooldown = maxCooldown;
                     }
