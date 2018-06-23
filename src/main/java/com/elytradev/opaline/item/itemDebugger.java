@@ -5,6 +5,8 @@ import com.elytradev.opaline.block.ModBlocks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -39,9 +41,13 @@ public class itemDebugger extends ItemBase {
                     for (IFluidTankProperties prop : properties) {
                         if (prop.getContents() == null) {
                             FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, prop.getCapacity() / 2);
-                            enchLazurite.tag = new NBTTagCompound();
-                            enchLazurite.tag.setInteger("ench1", 0);
-                            enchLazurite.tag.setInteger("ench2", 35);
+                            NBTTagList storedEnchantments = new NBTTagList();
+                            storedEnchantments.appendTag(new NBTTagString("depth_strider"));
+                            storedEnchantments.appendTag(new NBTTagString("sharpness"));
+                            NBTTagCompound tag = new NBTTagCompound();
+                            tag.setTag("StoredEnchantments", storedEnchantments);
+                            enchLazurite.tag = tag;
+
                             tank.fill(enchLazurite, true);
                             return EnumActionResult.SUCCESS;
                         } else {

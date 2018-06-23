@@ -1,0 +1,20 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+        "model":"opaline:centrifuge"
+    },
+	"variants": {
+		"normal": {
+			"model": "opaline:centrifuge",
+			"textures": {
+				"north": "opaline:blocks/centrifuge-1-in-red",
+				"east": "opaline:blocks/centrifuge-1-in-green",
+				"south": "opaline:blocks/centrifuge-1-out",
+				"west": "opaline:blocks/centrifuge-1-blank"
+			}
+		},
+		"inventory": {
+			"model": "opaline:centrifuge"
+		}
+	}
+}

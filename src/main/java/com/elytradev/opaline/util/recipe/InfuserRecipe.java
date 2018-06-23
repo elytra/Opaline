@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.swing.plaf.basic.BasicComboBoxUI;
-
 public class InfuserRecipe implements ICustomRecipe<InfuserRecipe, ItemStack> {
 
     protected ResourceLocation registryName;

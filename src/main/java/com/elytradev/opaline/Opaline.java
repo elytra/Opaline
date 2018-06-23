@@ -2,16 +2,21 @@ package com.elytradev.opaline;
 
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
+import com.elytradev.concrete.network.NetworkContext;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.client.OpalineTab;
+import com.elytradev.opaline.container.CentrifugeContainer;
 import com.elytradev.opaline.container.DistillerContainer;
 import com.elytradev.opaline.container.InfuserContainer;
 import com.elytradev.opaline.container.TriTankContainer;
 import com.elytradev.opaline.item.ModItems;
+import com.elytradev.opaline.network.PacketButtonClick;
 import com.elytradev.opaline.proxy.CommonProxy;
+import com.elytradev.opaline.tile.TileEntityCentrifuge;
 import com.elytradev.opaline.tile.TileEntityDistiller;
 import com.elytradev.opaline.tile.TileEntityInfuser;
 import com.elytradev.opaline.tile.TileEntityTriTank;
+import com.elytradev.opaline.util.OpalineLog;
 import com.elytradev.opaline.util.OpalineRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,6 +47,8 @@ public class Opaline {
     public static final String name  = "Opaline";
     public static final String version = "@VERSION@";
 
+    public static NetworkContext CONTEXT;
+
     @Mod.Instance(modId)
     public static Opaline instance;
 
@@ -57,12 +64,17 @@ public class Opaline {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        System.out.println(name + " is loading!");
+        OpalineLog.info(name + " is loading!");
+
+        CONTEXT = NetworkContext.forChannel("opaline");
+        CONTEXT.register(PacketButtonClick.class);
+
         MinecraftForge.EVENT_BUS.register(OpalineRecipes.class);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new IGuiHandler() {
             public static final int DISTILLER = 0;
             public static final int INFUSER = 1;
-            public static final int MULTI_TANK = 2;
+            public static final int TRI_TANK = 2;
+            public static final int CENTRIFUGE = 3;
             @Nullable
             @Override
             public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -75,10 +87,14 @@ public class Opaline {
                         return new InfuserContainer(
                                 player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
                                 (TileEntityInfuser)world.getTileEntity(new BlockPos(x,y,z)));
-                    case MULTI_TANK:
+                    case TRI_TANK:
                         return new TriTankContainer(
                                 player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
                                 (TileEntityTriTank)world.getTileEntity(new BlockPos(x,y,z)));
+                    case CENTRIFUGE:
+                        return new CentrifugeContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityCentrifuge)world.getTileEntity(new BlockPos(x,y,z)));
                     default:
                         return null;
                 }
@@ -100,11 +116,16 @@ public class Opaline {
                                 player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
                                 (TileEntityInfuser)world.getTileEntity(new BlockPos(x,y,z)));
                         return new ConcreteGui(infuserContainer);
-                    case MULTI_TANK:
+                    case TRI_TANK:
                         TriTankContainer multiTankContainer = new TriTankContainer(
                                 player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
                                 (TileEntityTriTank) world.getTileEntity(new BlockPos(x,y,z)));
                         return new ConcreteGui(multiTankContainer);
+                    case CENTRIFUGE:
+                        CentrifugeContainer centrifugeContainer = new CentrifugeContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityCentrifuge) world.getTileEntity(new BlockPos(x,y,z)));
+                        return new ConcreteGui(centrifugeContainer);
                     default:
                         return null;
                 }

@@ -9,6 +9,7 @@ fluid.lazurite=Lazurite
 tile.distiller.name=Opaline Distiller
 tile.infuser.name=Opaline Infuser
 tile.tri_tank.name=Tri-Tank
+tile.centrifuge.name=Lazurite Centrifuge
 
 #tooltips
 tooltip.opaline.logo_fake.0=§5§kwh§r§5You shouldn't have this.§5§kat

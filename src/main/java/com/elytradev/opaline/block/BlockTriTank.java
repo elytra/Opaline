@@ -80,12 +80,6 @@ public class BlockTriTank extends BlockTileEntity<TileEntityTriTank> implements 
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        TileEntityTriTank tile = getTileEntity(world, pos);
-        super.breakBlock(world, pos, state);
-    }
-
-    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos){
         switch(state.getValue(FACING)) {
             case NORTH:
