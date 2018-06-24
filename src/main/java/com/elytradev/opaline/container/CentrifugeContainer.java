@@ -46,12 +46,12 @@ public class CentrifugeContainer extends ConcreteContainer {
         WCycleButton mode = new WCycleButton(buttonEnabled, buttonDisabled, this::increaseMode, this::decreaseMode, buttonModes).withTooltip(tooltips);
         WClientButton go = new WClientButton(buttonGoEnabled, buttonGoDisabled, this::go).withTooltip("Activate");
         panel.add(playerInv, 0, 87);
-        panel.add(tankInRed, 26, 17, 28, 20);
-        panel.add(tankInGreen, 108, 17, 28, 20);
-        panel.add(tankOut, 67, 48, 28, 30);
-        panel.add(progress, 62, 32, 38, 16);
-        panel.add(mode, 66, 16, 12, 12);
-        panel.add(go, 84, 16, 12, 12);
+        panel.add(tankInRed, 26, 31, 28, 20);
+        panel.add(tankInGreen, 108, 31, 28, 20);
+        panel.add(tankOut, 67, 56, 28, 26);
+        panel.add(progress, 62, 37, 38, 16);
+        panel.add(mode, 61, 16, 18, 18);
+        panel.add(go, 83, 16, 18, 18);
     }
 
     public void increaseMode() {
