@@ -3,11 +3,14 @@ package com.elytradev.opaline.tile;
 import com.elytradev.concrete.inventory.*;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.item.ModItems;
+import com.elytradev.opaline.network.PacketButtonClick;
 import com.elytradev.opaline.util.FluidAccess;
+import com.elytradev.opaline.util.OpalineLog;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +19,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -27,8 +31,10 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     public ConcreteFluidTank tankInRed;
     public ConcreteFluidTank tankInGreen;
     public ConcreteFluidTank tankOut;
-    private int currentProcessTime;
-    private static final int processLength = 50;
+    private int currentProcessTime = 0;
+    private int processLength = 50;
+    private int mode;
+    public boolean isRunning;
 
 
     public TileEntityCentrifuge() {
@@ -42,7 +48,22 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     }
 
     public void update() {
-
+        if (!isRunning) return;
+        FluidStack singleOpaline = new FluidStack(ModBlocks.fluidOpaline, 1);
+        if (tankInRed.getFluidAmount() != 0 || tankInGreen.getFluidAmount() != 0) {
+            if (tankInRed.getFluidAmount() != 0) {
+                tankInRed.drain(1, true);
+                tankOut.fill(singleOpaline, true);
+            }
+            if (tankInGreen.getFluidAmount() != 0) {
+                tankInGreen.drain(1, true);
+                tankOut.fill(singleOpaline, true);
+            }
+            currentProcessTime++;
+        } else {
+            isRunning = false;
+            currentProcessTime = 0;
+        }
     }
 
     @Override
@@ -51,6 +72,8 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         tag.setTag("InputTankRed", tankInRed.writeToNBT(new NBTTagCompound()));
         tag.setTag("InputTankGreen", tankInRed.writeToNBT(new NBTTagCompound()));
         tag.setTag("OutputTank", tankOut.writeToNBT(new NBTTagCompound()));
+        tag.setInteger("Mode", mode);
+        tag.setBoolean("Running", isRunning);
         return tag;
     }
 
@@ -60,6 +83,8 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         tankInRed.readFromNBT(compound.getCompoundTag("InputTankRed"));
         tankInGreen.readFromNBT(compound.getCompoundTag("InputTankGreen"));
         tankOut.readFromNBT(compound.getCompoundTag("OutputTank"));
+        mode = compound.getInteger("Mode");
+        isRunning = compound.getBoolean("Running");
     }
 
     @Override
@@ -124,11 +149,11 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             switch (facing) {
                 case NORTH:
-                    return (T) FluidAccess.insertOnly(tankInRed);
+                    if (isRunning) return (T) FluidAccess.readOnly(tankInRed); else return (T) FluidAccess.fullAccess(tankInRed);
                 case EAST:
-                    return (T) FluidAccess.extractOnly(tankOut);
+                    if (isRunning) return (T) FluidAccess.readOnly(tankInGreen); else return (T) FluidAccess.fullAccess(tankInGreen);
                 case SOUTH:
-                    return (T) FluidAccess.insertOnly(tankInGreen);
+                    return (T) FluidAccess.extractOnly(tankOut);
                 case WEST:
                     return (T) FluidAccess.extractOnly(tankOut);
             }
@@ -136,5 +161,56 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         } else {
             return super.getCapability(capability, facing);
         }
+    }
+
+    public int getState() {
+        return this.mode;
+    }
+
+    public void increaseState() {
+        mode++;
+        if (mode >= 4) mode = 0;
+        OpalineLog.info(mode);
+        this.markDirty();
+    }
+
+    public void decreaseState() {
+        mode--;
+        if (mode < 0) mode = 3;
+        OpalineLog.info(mode);
+        this.markDirty();
+    }
+
+    public void startRunning() {
+        if (isRunning) return;
+        if (mode == 3 && (tankInGreen.getFluidAmount() != 0 || tankInRed.getFluidAmount() != 0) && tankOut.getFluid() != new FluidStack(ModBlocks.fluidLazurite, 1) && tankOut.getFluidAmount()+tankInRed.getFluidAmount()+tankInGreen.getFluidAmount() <= tankOut.getCapacity()) {
+            this.isRunning = true;
+            this.processLength = getProcessLength();
+            this.currentProcessTime = 0;
+        } else if (canFluidsMerge()) {
+            this.isRunning = true;
+        }
+        this.markDirty();
+    }
+
+    public boolean canFluidsMerge() {
+        if (tankOut.getFluidAmount()+tankInRed.getFluidAmount()+tankInRed.getFluidAmount() <= tankOut.getCapacity()) return false;
+        if (tankInRed.getFluid() == null || tankInGreen.getFluid() == null) return false;
+        FluidStack output = new FluidStack(ModBlocks.fluidLazurite, 1);
+        FluidStack red = tankInRed.getFluid();
+        FluidStack green = tankInGreen.getFluid();
+        NBTTagList listRed = red.tag.getTagList("StoredEnchantments", 0);
+        NBTTagList listGreen = green.tag.getTagList("StoredEnchantments", 0);
+        NBTTagList out;
+
+        return false;
+    }
+
+    public int getProcessLength() {
+        int divisor;
+        if ((tankInRed.getFluidAmount() != 0 && tankInGreen.getFluidAmount() == 0) || (tankInRed.getFluidAmount() == 0 && tankInGreen.getFluidAmount() != 0)) {
+            divisor = 1;
+        } else divisor = 2;
+        return (tankInRed.getFluidAmount()+tankInGreen.getFluidAmount())/divisor;
     }
 }

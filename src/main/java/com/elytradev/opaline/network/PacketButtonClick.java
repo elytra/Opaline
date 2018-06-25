@@ -4,6 +4,7 @@ import com.elytradev.concrete.network.Message;
 import com.elytradev.concrete.network.annotation.type.ReceivedOn;
 import com.elytradev.opaline.Opaline;
 //import com.elytradev.opaline.container.OscillatorContainer;
+import com.elytradev.opaline.container.CentrifugeContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,26 +28,9 @@ public class PacketButtonClick extends Message {
     @Override
     protected void handle(EntityPlayer entityPlayer) {
         Container container = entityPlayer.openContainer;
-//        if (entityPlayer.openContainer instanceof OscillatorContainer) {
-//            int amount = 0;
-//            OscillatorContainer oscillator = (OscillatorContainer)container;
-//            switch (name) {
-//                case "plus_one":
-//                    amount = 1;
-//                    break;
-//                case "plus_ten":
-//                    amount = 10;
-//                    break;
-//                case "minus_one":
-//                    amount = -1;
-//                    break;
-//                case "minus_ten":
-//                    amount = -10;
-//                    break;
-//                default:
-//                    break;
-//            }
-//            oscillator.increaseDelay(amount);
-//        }
+        if (entityPlayer.openContainer instanceof CentrifugeContainer) {
+            CentrifugeContainer centrifuge = (CentrifugeContainer) container;
+            centrifuge.catchServerSide(name);
+        }
     }
 }

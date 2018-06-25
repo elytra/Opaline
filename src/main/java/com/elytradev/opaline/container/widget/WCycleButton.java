@@ -9,27 +9,29 @@ import net.minecraft.util.ResourceLocation;
 public class WCycleButton extends WClientButton {
 
     public ResourceLocation[] options;
-    public int state = 0;
+    public int state;
     public Runnable onRightClick;
 
     public void setOnRightClick(Runnable r) {
         this.onRightClick = r;
     }
 
-    public WCycleButton(ResourceLocation enabled, ResourceLocation disabled, Runnable onClick, ResourceLocation... options) {
+    public WCycleButton(ResourceLocation enabled, ResourceLocation disabled, Runnable onClick, int currentState, ResourceLocation... options) {
         super(enabled, disabled, onClick);
         this.image = enabled;
         this.disabledImage = disabled;
         this.setOnClick(onClick);
+        this.state = currentState;
         this.options = options;
     }
 
-    public WCycleButton(ResourceLocation enabled, ResourceLocation disabled, Runnable onClick, Runnable onRightClick, ResourceLocation... options) {
+    public WCycleButton(ResourceLocation enabled, ResourceLocation disabled, Runnable onClick, Runnable onRightClick, int currentState, ResourceLocation... options) {
         super(enabled, disabled, onClick);
         this.image = enabled;
         this.disabledImage = disabled;
         this.setOnClick(onClick);
         this.setOnRightClick(onRightClick);
+        this.state = currentState;
         this.options = options;
     }
 
