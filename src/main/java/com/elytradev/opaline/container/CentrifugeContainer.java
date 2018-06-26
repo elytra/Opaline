@@ -3,6 +3,8 @@ package com.elytradev.opaline.container;
 import com.elytradev.concrete.inventory.gui.ConcreteContainer;
 import com.elytradev.concrete.inventory.gui.widget.*;
 import com.elytradev.opaline.Opaline;
+import com.elytradev.opaline.container.widget.WCentrCycleButton;
+import com.elytradev.opaline.container.widget.WCentrifugeButton;
 import com.elytradev.opaline.container.widget.WCycleButton;
 import com.elytradev.opaline.network.PacketButtonClick;
 import com.elytradev.opaline.tile.TileEntityCentrifuge;
@@ -29,6 +31,7 @@ public class CentrifugeContainer extends ConcreteContainer {
             buttonModes[i] = new ResourceLocation(Opaline.modId, "textures/gui/centrifuge/mode_" + i + ".png");
         }
     }
+
     private TileEntityCentrifuge centrifuge;
 
     public CentrifugeContainer(IInventory player, IInventory container, TileEntityCentrifuge centrifuge) {
@@ -46,8 +49,8 @@ public class CentrifugeContainer extends ConcreteContainer {
         tooltips[1] = "Merge Left";
         tooltips[2] = "Merge Right";
         tooltips[3] = "Dissolve";
-        WCycleButton mode = new WCycleButton(buttonEnabled, buttonDisabled, this::increaseMode, this::decreaseMode, centrifuge.getState(), buttonModes).withTooltip(tooltips);
-        WClientButton go = new WClientButton(buttonGoEnabled, buttonGoDisabled, this::go).withTooltip("Activate");
+        WCycleButton mode = new WCentrCycleButton(buttonEnabled, buttonDisabled, this::increaseMode, this::decreaseMode, centrifuge.getState(), centrifuge, buttonModes).withTooltip(tooltips);
+        WClientButton go = new WCentrifugeButton(buttonGoEnabled, buttonGoDisabled, this::go, centrifuge).withTooltip("Activate");
         go.setEnabled(!centrifuge.isRunning);
         panel.add(playerInv, 0, 87);
         panel.add(tankInRed, 26, 31, 28, 20);

@@ -1,6 +1,7 @@
 package com.elytradev.opaline.tile;
 
 import com.elytradev.concrete.inventory.*;
+import com.elytradev.opaline.Opaline;
 import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.item.ModItems;
 import com.elytradev.opaline.network.PacketButtonClick;
@@ -63,6 +64,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         } else {
             isRunning = false;
             currentProcessTime = 0;
+            OpalineLog.info("Run ended! isRunning: "+isRunning);
         }
     }
 
@@ -185,8 +187,30 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
             this.processLength = getDissolveLength();
             this.currentProcessTime = 0;
             this.isRunning = true;
+            OpalineLog.info("Run started!");
         } else if (canFluidsMerge()) {
-            this.isRunning = true;
+            switch (mode) {
+                case 0:
+                    break;
+                case 1:
+                    if (tankInRed.getFluidAmount() > (tankOut.getCapacity()-tankOut.getFluidAmount())) {
+                        this.processLength = tankInRed.getFluidAmount();
+                        this.currentProcessTime = 0;
+                        this.isRunning = true;
+                        OpalineLog.info("Run started!");
+                    }
+                    break;
+                case 2:
+                    if (tankInGreen.getFluidAmount() > (tankOut.getCapacity()-tankOut.getFluidAmount())) {
+                        this.processLength = tankInGreen.getFluidAmount();
+                        this.currentProcessTime = 0;
+                        this.isRunning = true;
+                        OpalineLog.info("Run started!");
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         this.markDirty();
     }
@@ -194,14 +218,31 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     public boolean canFluidsMerge() {
         if (tankOut.getFluidAmount()+tankInRed.getFluidAmount()+tankInRed.getFluidAmount() <= tankOut.getCapacity()) return false;
         if (tankInRed.getFluid() == null || tankInGreen.getFluid() == null) return false;
-        FluidStack output = new FluidStack(ModBlocks.fluidLazurite, 1);
-        FluidStack red = tankInRed.getFluid();
-        FluidStack green = tankInGreen.getFluid();
-        NBTTagList listRed = red.tag.getTagList("StoredEnchantments", 0);
-        NBTTagList listGreen = green.tag.getTagList("StoredEnchantments", 0);
-        NBTTagList out;
-
+        switch (mode) {
+            case 0:
+                break;
+            case 1:
+                return checkTankMatch(tankInGreen);
+            case 2:
+                return checkTankMatch(tankInRed);
+            default:
+                break;
+        }
         return false;
+    }
+
+    public boolean checkTankMatch(ConcreteFluidTank from) {
+        FluidStack fluid = from.getFluid();
+        if (fluid == null) return false;
+
+        NBTTagList tags = fluid.tag.getTagList("StoredEnchantments", 0);
+        FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setTag("StoredEnchantments", tags);
+        enchLazurite.tag = tag;
+
+        int outTest = tankOut.fill(enchLazurite, false);
+        return outTest == 1;
     }
 
     public int getDissolveLength() {
