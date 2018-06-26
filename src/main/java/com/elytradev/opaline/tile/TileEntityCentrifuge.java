@@ -48,16 +48,16 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     }
 
     public void update() {
-        if (!isRunning) return;
-        FluidStack singleOpaline = new FluidStack(ModBlocks.fluidOpaline, 1);
-        if (tankInRed.getFluidAmount() != 0 || tankInGreen.getFluidAmount() != 0) {
+        if (!isRunning || world.isRemote) return;
+        FluidStack singleOpaline = new FluidStack(ModBlocks.fluidOpaline, 2);
+        if (currentProcessTime < processLength) {
             if (tankInRed.getFluidAmount() != 0) {
-                tankInRed.drain(1, true);
-                tankOut.fill(singleOpaline, true);
+                int redOut = tankOut.fill(singleOpaline, true);
+                if (redOut == 2) tankInRed.drain(1, true);
             }
             if (tankInGreen.getFluidAmount() != 0) {
-                tankInGreen.drain(1, true);
-                tankOut.fill(singleOpaline, true);
+                int greenOut = tankOut.fill(singleOpaline, true);
+                if (greenOut == 2) tankInGreen.drain(1, true);
             }
             currentProcessTime++;
         } else {
@@ -70,7 +70,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tag = super.writeToNBT(compound);
         tag.setTag("InputTankRed", tankInRed.writeToNBT(new NBTTagCompound()));
-        tag.setTag("InputTankGreen", tankInRed.writeToNBT(new NBTTagCompound()));
+        tag.setTag("InputTankGreen", tankInGreen.writeToNBT(new NBTTagCompound()));
         tag.setTag("OutputTank", tankOut.writeToNBT(new NBTTagCompound()));
         tag.setInteger("Mode", mode);
         tag.setBoolean("Running", isRunning);
@@ -170,23 +170,21 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     public void increaseState() {
         mode++;
         if (mode >= 4) mode = 0;
-        OpalineLog.info(mode);
         this.markDirty();
     }
 
     public void decreaseState() {
         mode--;
         if (mode < 0) mode = 3;
-        OpalineLog.info(mode);
         this.markDirty();
     }
 
     public void startRunning() {
         if (isRunning) return;
-        if (mode == 3 && (tankInGreen.getFluidAmount() != 0 || tankInRed.getFluidAmount() != 0) && tankOut.getFluid() != new FluidStack(ModBlocks.fluidLazurite, 1) && tankOut.getFluidAmount()+tankInRed.getFluidAmount()+tankInGreen.getFluidAmount() <= tankOut.getCapacity()) {
-            this.isRunning = true;
-            this.processLength = getProcessLength();
+        if (mode == 3 && (tankInGreen.getFluidAmount() != 0 || tankInRed.getFluidAmount() != 0) && tankOut.getFluid() != new FluidStack(ModBlocks.fluidLazurite, 1)) {
+            this.processLength = getDissolveLength();
             this.currentProcessTime = 0;
+            this.isRunning = true;
         } else if (canFluidsMerge()) {
             this.isRunning = true;
         }
@@ -206,11 +204,16 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         return false;
     }
 
-    public int getProcessLength() {
+    public int getDissolveLength() {
         int divisor;
         if ((tankInRed.getFluidAmount() != 0 && tankInGreen.getFluidAmount() == 0) || (tankInRed.getFluidAmount() == 0 && tankInGreen.getFluidAmount() != 0)) {
             divisor = 1;
         } else divisor = 2;
-        return (tankInRed.getFluidAmount()+tankInGreen.getFluidAmount())/divisor;
+        if (2*(tankInRed.getFluidAmount()+tankInGreen.getFluidAmount()) >= (tankOut.getCapacity()-tankOut.getFluidAmount())) {
+            divisor *= 2;
+            if (tankOut.getFluidAmount() % 2 == 1) return (tankOut.getCapacity()-(tankOut.getFluidAmount()-1))/(divisor);
+            else return (tankOut.getCapacity()-tankOut.getFluidAmount())/(divisor);
+        }
+        return ((tankInRed.getFluidAmount()+tankInGreen.getFluidAmount()))/(divisor);
     }
 }

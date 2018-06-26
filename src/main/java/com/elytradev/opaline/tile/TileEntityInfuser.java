@@ -59,7 +59,7 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     }
 
     public static final Predicate<ItemStack> INGREDIENTS = (it) -> {
-        if (oreMatches("gemLapis", it) || it.getItem() == Items.QUARTZ) return true;
+        if (oreMatches("gemLapis", it) || oreMatches("gemQuartz", it)) return true;
         else return false;
     };
 
