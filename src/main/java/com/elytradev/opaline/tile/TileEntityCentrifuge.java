@@ -39,6 +39,8 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     private int currentPercent;
 
     private FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
+    private NBTTagList tags = new NBTTagList();
+    private NBTTagCompound tag = new NBTTagCompound();
 
     public TileEntityCentrifuge() {
         this.tankInRed = new ConcreteFluidTank(1000).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidLazurite));
@@ -48,6 +50,8 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         tankInRed.listen(this::markDirty);
         tankInGreen.listen(this::markDirty);
         tankOut.listen(this::markDirty);
+        tag.setTag("StoredEnchantments", tags);
+        enchLazurite.tag = tag;
     }
 
     public void update() {
@@ -55,6 +59,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         if (currentProcessTime < processLength) {
             switch (mode) {
                 case 0:
+                    processCombine();
                     break;
                 case 1:
                     processMerge(tankInGreen, tankInRed);
@@ -77,7 +82,23 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         currentPercent = 100 * currentProcessTime / processLength;
     }
 
-    public void processDissolve() {
+    private void processCombine() {
+        int out = tankOut.fill(enchLazurite, true);
+        if (out == 1) {
+            tankInRed.drain(1, true);
+            tankInGreen.drain(1, true);
+        }
+    }
+
+    private void processMerge(ConcreteFluidTank nbt, ConcreteFluidTank volume) {
+        int out = tankOut.fill(enchLazurite, true);
+        if (out == 1) {
+            volume.drain(1, true);
+            if (volume.getFluidAmount() != 0) nbt.drain((nbt.getFluidAmount()/volume.getFluidAmount())+1, true);
+        }
+    }
+
+    private void processDissolve() {
         FluidStack singleOpaline = new FluidStack(ModBlocks.fluidOpaline, 2);
         if (tankInRed.getFluidAmount() != 0) {
             int redOut = tankOut.fill(singleOpaline, true);
@@ -86,14 +107,6 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         if (tankInGreen.getFluidAmount() != 0) {
             int greenOut = tankOut.fill(singleOpaline, true);
             if (greenOut == 2) tankInGreen.drain(1, true);
-        }
-    }
-
-    public void processMerge(ConcreteFluidTank nbt, ConcreteFluidTank volume) {
-        int out = tankOut.fill(enchLazurite, true);
-        if (out == 1) {
-            volume.drain(1, true);
-            if (volume.getFluidAmount() != 0) nbt.drain((nbt.getFluidAmount()/volume.getFluidAmount())+1, true);
         }
     }
 
