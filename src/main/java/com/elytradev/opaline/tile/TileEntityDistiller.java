@@ -54,7 +54,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
             (it)->oreMatches("gemLapis", it), Validators.FURNACE_FUELS, Validators.NOTHING)
             .setCanExtract(SLOT_LAPIS, false)
             .setCanExtract(SLOT_FUEL, false)
-            .withName(ModBlocks.distiller.getUnlocalizedName() + ".name");
+            .withName(ModBlocks.DISTILLER.getUnlocalizedName() + ".name");
         tank.listen(this::markDirty);
         items.listen(this::markDirty);
     }
@@ -74,7 +74,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
                 }
                 if (currentProcessTime >= processLength) {
                     items.extractItem(SLOT_LAPIS, 1, false);
-                    items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), false);
+                    items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.EXHAUSTED_LAPIS, 1), false);
                     tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), true);
                     currentProcessTime = 0;
                 }
@@ -137,7 +137,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
 
     private boolean processItem() {
         ItemStack itemExtracted = items.extractItem(SLOT_LAPIS, 1, true);
-        ItemStack itemInserted = items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.exhaustedLapis, 1), true);
+        ItemStack itemInserted = items.insertItem(SLOT_EXHAUSTED, new ItemStack(ModItems.EXHAUSTED_LAPIS, 1), true);
         int tankFilled = tank.fill(new FluidStack(ModBlocks.fluidOpaline, 100), false);
         if (itemExtracted.isEmpty()) {
             return false;

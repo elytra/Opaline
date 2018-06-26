@@ -17,8 +17,9 @@ public class WCentrCycleButton extends WCycleButton {
 
     @Override
     public void paintBackground(int x, int y) {
+        enabled = !centrifuge.isRunning;
         if (state >= options.length) state = options.length;
-        if (!centrifuge.isRunning) {
+        if (enabled) {
             super.paintBackground(x, y);
             rect(options[state], x, y, getWidth(), getHeight(), 0, 0, 1, 1);
         } else {
@@ -33,8 +34,7 @@ public class WCentrCycleButton extends WCycleButton {
 
     @Override
     public void onClick(int x, int y, int button) {
-        enabled = !centrifuge.isRunning;
-        if (!centrifuge.isRunning) {
+        if (enabled) {
             if (button == 0) {
                 state++;
                 if (state >= options.length) state = 0;

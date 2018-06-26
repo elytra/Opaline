@@ -29,7 +29,7 @@ public class TileEntityTriTank extends TileEntity implements IContainerInventory
     public ConcreteFluidTank tankGreen;
 
     public TileEntityTriTank() {
-        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.triTank.getUnlocalizedName() + ".name");
+        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.TRI_TANK.getUnlocalizedName() + ".name");
         this.tankRed = new ConcreteFluidTank(1000);
         this.tankBlue = new ConcreteFluidTank(1000);
         this.tankGreen = new ConcreteFluidTank(1000);

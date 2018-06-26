@@ -43,7 +43,7 @@ public class CentrifugeContainer extends ConcreteContainer {
         WFluidBar tankInRed = new WFluidBar(inRedBG, inRedFG, centrifuge.tankInRed).withTooltip("%d/%d mB");
         WFluidBar tankInGreen = new WFluidBar(inGreenBG, inGreenFG, centrifuge.tankInGreen).withTooltip("%d/%d mB");
         WFluidBar tankOut = new WFluidBar(outBG, outFG, centrifuge.tankOut).withTooltip("%d/%d mB");
-        WBar progress = new WBar(arrowBG, arrowFG, container, 0, 1, WBar.Direction.DOWN);
+        WBar progress = new WBar(arrowBG, arrowFG, container, 0, 1, WBar.Direction.DOWN).withTooltip("%d%%");
         String[] tooltips = new String[4];
         tooltips[0] = "Combine";
         tooltips[1] = "Merge Left";

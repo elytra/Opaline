@@ -66,10 +66,10 @@ public class TileEntityInfuser extends TileEntity implements ITickable, IContain
     public TileEntityInfuser() {
         this.tank = new ConcreteFluidTank(10).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidOpaline));
         this.items = new ConcreteItemStorage(3).withValidators(
-                (it)->(it.getItem() == ModItems.exhaustedLapis), INGREDIENTS, Validators.NOTHING)
+                (it)->(it.getItem() == ModItems.EXHAUSTED_LAPIS), INGREDIENTS, Validators.NOTHING)
                 .setCanExtract(SLOT_CATALYST, false)
                 .setCanExtract(SLOT_INGREDIENT, false)
-                .withName(ModBlocks.infuser.getUnlocalizedName() + ".name");
+                .withName(ModBlocks.INFUSER.getUnlocalizedName() + ".name");
         tank.listen(this::markDirty);
         items.listen(this::markDirty);
     }

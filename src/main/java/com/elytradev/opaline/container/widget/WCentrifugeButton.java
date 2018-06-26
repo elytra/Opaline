@@ -18,7 +18,8 @@ public class WCentrifugeButton extends WClientButton {
 
     @Override
     public void paintBackground(int x, int y) {
-        if (!centrifuge.isRunning) {
+        enabled = !centrifuge.isRunning;
+        if (enabled) {
             super.paintBackground(x, y);
         } else {
             if (disabledImage!=null) {
@@ -31,7 +32,7 @@ public class WCentrifugeButton extends WClientButton {
 
     @Override
     public void onClick(int x, int y, int button) {
-        if (!centrifuge.isRunning) {
+        if (enabled) {
             Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             if (onClick!=null) onClick.run();
         }

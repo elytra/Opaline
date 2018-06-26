@@ -33,7 +33,7 @@ public class RenderDistiller extends TileEntitySpecialRenderer<TileEntityDistill
     @Override
     public void render(TileEntityDistiller te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         IBlockState ibs = te.getWorld().getBlockState(te.getPos());
-        if (ibs.getBlock() != ModBlocks.distiller) return;
+        if (ibs.getBlock() != ModBlocks.DISTILLER) return;
         FluidStack fluid = te.tank.getFluid();
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();

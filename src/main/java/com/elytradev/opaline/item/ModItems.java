@@ -6,12 +6,12 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModItems {
 
-        public static ItemBase exhaustedLapis = new ItemBase("exhausted_lapis", "dyeBlue").setCreativeTab(Opaline.creativeTab);
-        public static ItemBase quartzLapis = new ItemBase("quartz_lapis").setCreativeTab(Opaline.creativeTab);
-        public static itemDebugger logoFake = new itemDebugger("logo_fake");
+        public static ItemBase EXHAUSTED_LAPIS = new ItemBase("exhausted_lapis", "dyeBlue").setCreativeTab(Opaline.creativeTab);
+        public static ItemBase QUARTZ_LAPIS = new ItemBase("quartz_lapis").setCreativeTab(Opaline.creativeTab);
+        public static itemDebugger LOGO_FAKE = new itemDebugger("logo_fake");
 
     public static ItemBase[] allItems = {
-            exhaustedLapis, logoFake, quartzLapis
+            EXHAUSTED_LAPIS, LOGO_FAKE, QUARTZ_LAPIS
     };
 
     public static void register(IForgeRegistry<Item> registry) {

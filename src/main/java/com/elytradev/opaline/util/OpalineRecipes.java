@@ -26,14 +26,14 @@ public class OpalineRecipes {
 
         // Crafting bench recipes
 
-        recipe(r, new ShapedOreRecipe(new ResourceLocation("opaline:blocks"), new ItemStack(ModBlocks.distiller, 1),
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("opaline:blocks"), new ItemStack(ModBlocks.DISTILLER, 1),
                 "bc ", "g b", "sss",
                 'b', new ItemStack(Items.GLASS_BOTTLE),
                 's', new ItemStack(Blocks.STONE_SLAB),
                 'c', "ingotCopper",
                 'g', "glass"));
 
-        recipe(r, new ShapedOreRecipe(new ResourceLocation("opaline:blocks"), new ItemStack(ModBlocks.infuser,1),
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("opaline:blocks"), new ItemStack(ModBlocks.INFUSER,1),
                 "b  ", "sss", "scs",
                 'b', new ItemStack(Items.GLASS_BOTTLE),
                 's', new ItemStack(Blocks.STONE_SLAB),
@@ -41,9 +41,9 @@ public class OpalineRecipes {
 
         // Infuser recipes
 
-        ItemIngredient exhaustedLapis = ItemIngredient.of(ModItems.exhaustedLapis);
+        ItemIngredient exhaustedLapis = ItemIngredient.of(ModItems.EXHAUSTED_LAPIS);
         ItemIngredient lapis = ItemIngredient.of("gemLapis");
-        ItemIngredient quartz = ItemIngredient.of(Items.QUARTZ);
+        ItemIngredient quartz = ItemIngredient.of("gemQuartz");
 
         InfuserRecipe remakeLapis = new InfuserRecipe(new ItemStack(Items.DYE, 2, 4),
                 exhaustedLapis,
@@ -51,7 +51,7 @@ public class OpalineRecipes {
                 500);
         MachineRecipes.register(remakeLapis);
 
-        InfuserRecipe makeQuartzLapis = new InfuserRecipe(new ItemStack(ModItems.quartzLapis, 1),
+        InfuserRecipe makeQuartzLapis = new InfuserRecipe(new ItemStack(ModItems.QUARTZ_LAPIS, 1),
                 exhaustedLapis,
                 quartz,
                 250);

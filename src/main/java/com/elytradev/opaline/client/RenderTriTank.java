@@ -32,7 +32,7 @@ public class RenderTriTank extends TileEntitySpecialRenderer<TileEntityTriTank> 
     @Override
     public void render(TileEntityTriTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         IBlockState ibs = te.getWorld().getBlockState(te.getPos());
-        if (ibs.getBlock() != ModBlocks.triTank) return;
+        if (ibs.getBlock() != ModBlocks.TRI_TANK) return;
         FluidStack fluidRed = te.tankRed.getFluid();
         FluidStack fluidBlue = te.tankBlue.getFluid();
         FluidStack fluidGreen = te.tankGreen.getFluid();

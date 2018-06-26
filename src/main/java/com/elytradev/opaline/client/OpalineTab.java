@@ -14,6 +14,6 @@ public class OpalineTab extends CreativeTabs {
 
     @Override
     public ItemStack getTabIconItem() {
-        return new ItemStack(ModItems.logoFake);
+        return new ItemStack(ModItems.LOGO_FAKE);
     }
 }

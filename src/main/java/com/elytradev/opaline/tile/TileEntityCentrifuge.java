@@ -27,7 +27,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nullable;
 
 public class TileEntityCentrifuge extends TileEntity implements ITickable, IContainerInventoryHolder {
-
     public ConcreteItemStorage inv;
     public ConcreteFluidTank tankInRed;
     public ConcreteFluidTank tankInGreen;
@@ -36,13 +35,16 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     private int processLength = 50;
     private int mode;
     public boolean isRunning;
+    private static final int MAX_PERCENT = 100;
+    private int currentPercent;
 
+    private FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
 
     public TileEntityCentrifuge() {
         this.tankInRed = new ConcreteFluidTank(1000).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidLazurite));
         this.tankInGreen = new ConcreteFluidTank(1000).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidLazurite));
         this.tankOut = new ConcreteFluidTank(2000).withFillValidator(Validators.NO_FLUID);
-        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.centrifuge.getUnlocalizedName() + ".name");
+        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.CENTRIFUGE.getUnlocalizedName() + ".name");
         tankInRed.listen(this::markDirty);
         tankInGreen.listen(this::markDirty);
         tankOut.listen(this::markDirty);
@@ -50,21 +52,48 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
 
     public void update() {
         if (!isRunning || world.isRemote) return;
-        FluidStack singleOpaline = new FluidStack(ModBlocks.fluidOpaline, 2);
         if (currentProcessTime < processLength) {
-            if (tankInRed.getFluidAmount() != 0) {
-                int redOut = tankOut.fill(singleOpaline, true);
-                if (redOut == 2) tankInRed.drain(1, true);
-            }
-            if (tankInGreen.getFluidAmount() != 0) {
-                int greenOut = tankOut.fill(singleOpaline, true);
-                if (greenOut == 2) tankInGreen.drain(1, true);
+            switch (mode) {
+                case 0:
+                    break;
+                case 1:
+                    processMerge(tankInGreen, tankInRed);
+                    break;
+                case 2:
+                    processMerge(tankInRed, tankInGreen);
+                    break;
+                case 3:
+                    processDissolve();
+                    break;
+                default:
+                    break;
             }
             currentProcessTime++;
         } else {
             isRunning = false;
             currentProcessTime = 0;
-            OpalineLog.info("Run ended! isRunning: "+isRunning);
+            markDirty();
+        }
+        currentPercent = 100 * currentProcessTime / processLength;
+    }
+
+    public void processDissolve() {
+        FluidStack singleOpaline = new FluidStack(ModBlocks.fluidOpaline, 2);
+        if (tankInRed.getFluidAmount() != 0) {
+            int redOut = tankOut.fill(singleOpaline, true);
+            if (redOut == 2) tankInRed.drain(1, true);
+        }
+        if (tankInGreen.getFluidAmount() != 0) {
+            int greenOut = tankOut.fill(singleOpaline, true);
+            if (greenOut == 2) tankInGreen.drain(1, true);
+        }
+    }
+
+    public void processMerge(ConcreteFluidTank nbt, ConcreteFluidTank volume) {
+        int out = tankOut.fill(enchLazurite, true);
+        if (out == 1) {
+            volume.drain(1, true);
+            if (volume.getFluidAmount() != 0) nbt.drain((nbt.getFluidAmount()/volume.getFluidAmount())+1, true);
         }
     }
 
@@ -131,8 +160,8 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
             return view;
         }
         else {
-            return view.withField(0, () -> currentProcessTime)
-                    .withField(1, () -> processLength);
+            return view.withField(0, () -> currentPercent)
+                    .withField(1, () -> MAX_PERCENT);
         }
     }
 
@@ -187,25 +216,35 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
             this.processLength = getDissolveLength();
             this.currentProcessTime = 0;
             this.isRunning = true;
-            OpalineLog.info("Run started!");
         } else if (canFluidsMerge()) {
             switch (mode) {
                 case 0:
                     break;
                 case 1:
-                    if (tankInRed.getFluidAmount() > (tankOut.getCapacity()-tankOut.getFluidAmount())) {
+                    if (tankInRed.getFluidAmount() < (tankOut.getCapacity()-tankOut.getFluidAmount())) {
+                        OpalineLog.info(enchLazurite.tag);
+                        if (tankInGreen.getFluid() == null) return;
+                        NBTTagList tags = tankInGreen.getFluid().tag.getTagList("StoredEnchantments", 0);
+                        FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
+                        NBTTagCompound tag = new NBTTagCompound();
+                        tag.setTag("StoredEnchantments", tags);
+                        enchLazurite.tag = tag;
                         this.processLength = tankInRed.getFluidAmount();
                         this.currentProcessTime = 0;
                         this.isRunning = true;
-                        OpalineLog.info("Run started!");
                     }
                     break;
                 case 2:
-                    if (tankInGreen.getFluidAmount() > (tankOut.getCapacity()-tankOut.getFluidAmount())) {
+                    if (tankInGreen.getFluidAmount() < (tankOut.getCapacity()-tankOut.getFluidAmount())) {
+                        if (tankInRed.getFluid() == null) return;
+                        NBTTagList tags = tankInRed.getFluid().tag.getTagList("StoredEnchantments", 0);
+                        FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
+                        NBTTagCompound tag = new NBTTagCompound();
+                        tag.setTag("StoredEnchantments", tags);
+                        enchLazurite.tag = tag;
                         this.processLength = tankInGreen.getFluidAmount();
                         this.currentProcessTime = 0;
                         this.isRunning = true;
-                        OpalineLog.info("Run started!");
                     }
                     break;
                 default:
@@ -216,7 +255,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     }
 
     public boolean canFluidsMerge() {
-        if (tankOut.getFluidAmount()+tankInRed.getFluidAmount()+tankInRed.getFluidAmount() <= tankOut.getCapacity()) return false;
+        if (tankOut.getFluidAmount()+tankInRed.getFluidAmount()+tankInRed.getFluidAmount() > tankOut.getCapacity()) return false;
         if (tankInRed.getFluid() == null || tankInGreen.getFluid() == null) return false;
         switch (mode) {
             case 0:
@@ -236,7 +275,6 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         if (fluid == null) return false;
 
         NBTTagList tags = fluid.tag.getTagList("StoredEnchantments", 0);
-        FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
         NBTTagCompound tag = new NBTTagCompound();
         tag.setTag("StoredEnchantments", tags);
         enchLazurite.tag = tag;

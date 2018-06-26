@@ -33,7 +33,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
     @Override
     public void render(TileEntityInfuser te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         IBlockState ibs = te.getWorld().getBlockState(te.getPos());
-        if (ibs.getBlock() != ModBlocks.infuser) return;
+        if (ibs.getBlock() != ModBlocks.INFUSER) return;
         FluidStack fluid = te.tank.getFluid();
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
