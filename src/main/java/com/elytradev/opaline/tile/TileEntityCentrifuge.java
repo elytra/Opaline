@@ -6,6 +6,7 @@ import com.elytradev.opaline.block.ModBlocks;
 import com.elytradev.opaline.item.ModItems;
 import com.elytradev.opaline.network.PacketButtonClick;
 import com.elytradev.opaline.util.FluidAccess;
+import com.elytradev.opaline.util.FluidEnchantmentHelper;
 import com.elytradev.opaline.util.OpalineLog;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -39,8 +40,6 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
     private int currentPercent;
 
     private FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
-    private NBTTagList tags = new NBTTagList();
-    private NBTTagCompound tag = new NBTTagCompound();
 
     public TileEntityCentrifuge() {
         this.tankInRed = new ConcreteFluidTank(1000).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidLazurite));
@@ -50,8 +49,6 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         tankInRed.listen(this::markDirty);
         tankInGreen.listen(this::markDirty);
         tankOut.listen(this::markDirty);
-        tag.setTag("StoredEnchantments", tags);
-        enchLazurite.tag = tag;
     }
 
     public void update() {
@@ -235,13 +232,8 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
                     break;
                 case 1:
                     if (tankInRed.getFluidAmount() < (tankOut.getCapacity()-tankOut.getFluidAmount())) {
-                        OpalineLog.info(enchLazurite.tag);
                         if (tankInGreen.getFluid() == null) return;
-                        NBTTagList tags = tankInGreen.getFluid().tag.getTagList("StoredEnchantments", 0);
-                        FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
-                        NBTTagCompound tag = new NBTTagCompound();
-                        tag.setTag("StoredEnchantments", tags);
-                        enchLazurite.tag = tag;
+                        FluidEnchantmentHelper.setEnchantments(FluidEnchantmentHelper.getEnchantments(tankInGreen.getFluid()), enchLazurite);
                         this.processLength = tankInRed.getFluidAmount();
                         this.currentProcessTime = 0;
                         this.isRunning = true;
@@ -250,11 +242,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
                 case 2:
                     if (tankInGreen.getFluidAmount() < (tankOut.getCapacity()-tankOut.getFluidAmount())) {
                         if (tankInRed.getFluid() == null) return;
-                        NBTTagList tags = tankInRed.getFluid().tag.getTagList("StoredEnchantments", 0);
-                        FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, 1);
-                        NBTTagCompound tag = new NBTTagCompound();
-                        tag.setTag("StoredEnchantments", tags);
-                        enchLazurite.tag = tag;
+                        FluidEnchantmentHelper.setEnchantments(FluidEnchantmentHelper.getEnchantments(tankInRed.getFluid()), enchLazurite);
                         this.processLength = tankInGreen.getFluidAmount();
                         this.currentProcessTime = 0;
                         this.isRunning = true;

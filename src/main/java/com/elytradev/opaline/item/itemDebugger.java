@@ -2,7 +2,11 @@ package com.elytradev.opaline.item;
 
 import com.elytradev.opaline.Opaline;
 import com.elytradev.opaline.block.ModBlocks;
+import com.elytradev.opaline.util.FluidEnchantmentHelper;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.enchantment.EnchantmentKnockback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -41,12 +45,8 @@ public class itemDebugger extends ItemBase {
                     for (IFluidTankProperties prop : properties) {
                         if (prop.getContents() == null) {
                             FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, prop.getCapacity() / 2);
-                            NBTTagList storedEnchantments = new NBTTagList();
-                            storedEnchantments.appendTag(new NBTTagString("depth_strider"));
-                            storedEnchantments.appendTag(new NBTTagString("sharpness"));
-                            NBTTagCompound tag = new NBTTagCompound();
-                            tag.setTag("StoredEnchantments", storedEnchantments);
-                            enchLazurite.tag = tag;
+                            FluidEnchantmentHelper.addEnchantment(enchLazurite, new EnchantmentData(Enchantment.getEnchantmentByID(0), 0));
+                            FluidEnchantmentHelper.addEnchantment(enchLazurite, new EnchantmentData(Enchantment.getEnchantmentByID(16), 0));
 
                             tank.fill(enchLazurite, true);
                             return EnumActionResult.SUCCESS;
