@@ -233,7 +233,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
                 case 1:
                     if (tankInRed.getFluidAmount() < (tankOut.getCapacity()-tankOut.getFluidAmount())) {
                         if (tankInGreen.getFluid() == null) return;
-                        FluidEnchantmentHelper.setEnchantments(FluidEnchantmentHelper.getEnchantments(tankInGreen.getFluid()), enchLazurite);
+                        FluidEnchantmentHelper.setFluidEnchantments(FluidEnchantmentHelper.getFluidEnchantments(tankInGreen.getFluid()), enchLazurite);
                         this.processLength = tankInRed.getFluidAmount();
                         this.currentProcessTime = 0;
                         this.isRunning = true;
@@ -242,7 +242,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
                 case 2:
                     if (tankInGreen.getFluidAmount() < (tankOut.getCapacity()-tankOut.getFluidAmount())) {
                         if (tankInRed.getFluid() == null) return;
-                        FluidEnchantmentHelper.setEnchantments(FluidEnchantmentHelper.getEnchantments(tankInRed.getFluid()), enchLazurite);
+                        FluidEnchantmentHelper.setFluidEnchantments(FluidEnchantmentHelper.getFluidEnchantments(tankInRed.getFluid()), enchLazurite);
                         this.processLength = tankInGreen.getFluidAmount();
                         this.currentProcessTime = 0;
                         this.isRunning = true;

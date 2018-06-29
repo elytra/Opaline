@@ -45,8 +45,8 @@ public class itemDebugger extends ItemBase {
                     for (IFluidTankProperties prop : properties) {
                         if (prop.getContents() == null) {
                             FluidStack enchLazurite = new FluidStack(ModBlocks.fluidLazurite, prop.getCapacity() / 2);
-                            FluidEnchantmentHelper.addEnchantment(enchLazurite, new EnchantmentData(Enchantment.getEnchantmentByID(0), 0));
-                            FluidEnchantmentHelper.addEnchantment(enchLazurite, new EnchantmentData(Enchantment.getEnchantmentByID(16), 0));
+                            FluidEnchantmentHelper.addFluidEnchantment(enchLazurite, new EnchantmentData(Enchantment.getEnchantmentByLocation("protection"), 0));
+                            FluidEnchantmentHelper.addFluidEnchantment(enchLazurite, new EnchantmentData(Enchantment.getEnchantmentByLocation("sharpness"), 0));
 
                             tank.fill(enchLazurite, true);
                             return EnumActionResult.SUCCESS;
