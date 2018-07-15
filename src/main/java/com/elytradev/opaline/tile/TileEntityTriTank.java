@@ -29,7 +29,7 @@ public class TileEntityTriTank extends TileEntity implements IContainerInventory
     public ConcreteFluidTank tankGreen;
 
     public TileEntityTriTank() {
-        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.TRI_TANK.getUnlocalizedName() + ".name");
+        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.TRI_TANK.getTranslationKey() + ".name");
         this.tankRed = new ConcreteFluidTank(1000);
         this.tankBlue = new ConcreteFluidTank(1000);
         this.tankGreen = new ConcreteFluidTank(1000);
@@ -81,7 +81,7 @@ public class TileEntityTriTank extends TileEntity implements IContainerInventory
         // again, I've copy-pasted this like 12 times, should probably go into Concrete
         if (!hasWorld() || getWorld().isRemote) return;
         WorldServer ws = (WorldServer)getWorld();
-        Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+        Chunk c = getWorld().getChunk(getPos());
         SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
         for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
             if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {

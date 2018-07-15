@@ -54,7 +54,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
             (it)->oreMatches("gemLapis", it), Validators.FURNACE_FUELS, Validators.NOTHING)
             .setCanExtract(SLOT_LAPIS, false)
             .setCanExtract(SLOT_FUEL, false)
-            .withName(ModBlocks.DISTILLER.getUnlocalizedName() + ".name");
+            .withName(ModBlocks.DISTILLER.getTranslationKey() + ".name");
         tank.listen(this::markDirty);
         items.listen(this::markDirty);
     }
@@ -126,7 +126,7 @@ public class TileEntityDistiller extends TileEntity implements ITickable, IConta
         // again, I've copy-pasted this like 12 times, should probably go into Concrete
         if (!hasWorld() || getWorld().isRemote) return;
         WorldServer ws = (WorldServer)getWorld();
-        Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+        Chunk c = getWorld().getChunk(getPos());
         SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
         for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
             if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {

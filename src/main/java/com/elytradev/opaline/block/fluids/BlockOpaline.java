@@ -17,7 +17,7 @@ public class BlockOpaline extends BlockFluidClassic {
 
         this.name = name;
 
-        setUnlocalizedName(Opaline.modId + ".fluid." + name);
+        setTranslationKey(Opaline.modId + ".fluid." + name);
         setRegistryName(name);
     }
 }

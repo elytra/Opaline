@@ -20,7 +20,7 @@ public class FluidEnchantmentHelper {
 
     public static List<Enchantment> getFluidEnchantments(FluidStack fluid) {
 
-        List<Enchantment> list = new ArrayList<Enchantment>();
+        List<Enchantment> list = new ArrayList<>();
         NBTTagList enchants = getFluidEnchantmentNBT(fluid);
 
         for (int i = 0; i < enchants.tagCount(); ++i) {
@@ -59,7 +59,7 @@ public class FluidEnchantmentHelper {
             }
         }
 
-        if (nbttaglist.hasNoTags()) {
+        if (nbttaglist.isEmpty()) {
             if (fluid.tag != null) fluid.tag.removeTag("ench");
         }
         else fluid.tag.setTag("ench", nbttaglist);

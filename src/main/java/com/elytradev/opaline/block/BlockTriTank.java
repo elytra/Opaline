@@ -46,7 +46,7 @@ public class BlockTriTank extends BlockTileEntity<TileEntityTriTank> implements 
     @Override
     public IBlockState getStateFromMeta(int meta){
         int facebits = meta & FACE;
-        EnumFacing facing = EnumFacing.getHorizontal(facebits);
+        EnumFacing facing = EnumFacing.byHorizontalIndex(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
     }
 
@@ -113,7 +113,7 @@ public class BlockTriTank extends BlockTileEntity<TileEntityTriTank> implements 
 
     @SideOnly(Side.CLIENT)
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

@@ -45,7 +45,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         this.tankInRed = new ConcreteFluidTank(1000).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidLazurite));
         this.tankInGreen = new ConcreteFluidTank(1000).withFillValidator((it)->(it.getFluid() == ModBlocks.fluidLazurite));
         this.tankOut = new ConcreteFluidTank(2000).withFillValidator(Validators.NO_FLUID);
-        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.CENTRIFUGE.getUnlocalizedName() + ".name");
+        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.CENTRIFUGE.getTranslationKey() + ".name");
         tankInRed.listen(this::markDirty);
         tankInGreen.listen(this::markDirty);
         tankOut.listen(this::markDirty);
@@ -154,7 +154,7 @@ public class TileEntityCentrifuge extends TileEntity implements ITickable, ICont
         // again, I've copy-pasted this like 12 times, should probably go into Concrete
         if (!hasWorld() || getWorld().isRemote) return;
         WorldServer ws = (WorldServer)getWorld();
-        Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+        Chunk c = getWorld().getChunk(getPos());
         SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
         for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
             if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {

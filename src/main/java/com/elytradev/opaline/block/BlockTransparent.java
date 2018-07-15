@@ -22,7 +22,7 @@ public class BlockTransparent extends Block implements IBlockBase {
         //setSoundType(SoundType.GLASS);
         this.name = name;
 
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         setRegistryName(name);
     }
 
@@ -47,7 +47,7 @@ public class BlockTransparent extends Block implements IBlockBase {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 
